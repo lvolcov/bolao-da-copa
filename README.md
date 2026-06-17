@@ -15,7 +15,7 @@ No backend, no build step.
 ## How it works
 
 ```
-GitHub Action (every 2h + on push)
+GitHub Action (every 20 min + on push)
   └─ scripts/fetch_standings.py  →  public/standings.json   (uses the API secret)
 public/ (deployed to Pages)
   ├─ index.html · app.js          scores predictions vs standings in the browser
@@ -31,7 +31,7 @@ public/ (deployed to Pages)
    football-data.org token. (Never commit the token.)
 3. **Enable Pages**: repo → *Settings → Pages → Build and deployment → GitHub
    Actions*.
-4. Done — the Action deploys on push and refreshes the standings every 2 hours.
+4. Done — the Action deploys on push and refreshes the standings every 20 minutes.
    Trigger a run anytime from the *Actions* tab (*Run workflow*).
 
 ## Updating the predictions

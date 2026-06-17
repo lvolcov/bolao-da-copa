@@ -8,7 +8,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 */2 * * *" # every 2 hours
+    - cron: "*/20 * * * *" # every 20 minutes
   workflow_dispatch:
 
 permissions:
