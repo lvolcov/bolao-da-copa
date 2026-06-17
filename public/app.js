@@ -42,12 +42,13 @@ function renderLeaderboard(rows, maxPts) {
       const rank = i + 1;
       const lead = rank <= 3;
       return `
-      <div class="flex items-center gap-3 rounded-xl border ${lead ? "border-emerald-500/40 bg-emerald-500/5" : "border-slate-800 bg-slate-900"} px-4 py-3">
+      <button type="button" data-player="${r.player}" title="Ver palpites de ${r.player}"
+        class="flex w-full items-center gap-3 rounded-xl border ${lead ? "border-emerald-500/40 bg-emerald-500/5" : "border-slate-800 bg-slate-900"} px-4 py-3 text-left transition hover:border-emerald-400 hover:bg-emerald-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
         <span class="w-8 shrink-0 text-center font-display text-lg font-extrabold ${lead ? "" : "text-slate-400"}">${medal(rank)}</span>
         <span class="flex-1 truncate font-medium">${r.player}</span>
         <span class="font-display text-lg font-extrabold tabular-nums text-emerald-400">${r.points}</span>
         <span class="text-xs text-slate-500">/ ${maxPts}</span>
-      </div>`;
+      </button>`;
     })
     .join("");
 }
@@ -156,6 +157,15 @@ async function main() {
   const draw = () => renderPlayerDetail(sel.value, predictions.predictions[sel.value], actual, groups);
   sel.addEventListener("change", draw);
   draw();
+
+  // Click a name in the leaderboard → select that player and scroll to palpites.
+  document.getElementById("leaderboard").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-player]");
+    if (!btn) return;
+    sel.value = btn.dataset.player;
+    draw();
+    document.getElementById("palpites").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   renderGroups(standings);
 }
