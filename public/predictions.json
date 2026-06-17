@@ -1,0 +1,1146 @@
+{
+ "players": [
+  "Diego",
+  "Miguel",
+  "Gabriel",
+  "Leandro",
+  "Lucas Volcov",
+  "Junior",
+  "Alisson",
+  "Thiago",
+  "Douglas",
+  "Guilherme B.",
+  "Osmar",
+  "Andrew",
+  "Pedro",
+  "Manuel",
+  "Murilo"
+ ],
+ "groups": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L"
+ ],
+ "scoring": "1 point per exact group position",
+ "predictions": {
+  "Diego": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ivory Coast",
+    "Ecuador",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Iran",
+    "Egypt",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Miguel": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Qatar",
+    "Bosnia-Herzegovina"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "Paraguay",
+    "United States",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Japan",
+    "Netherlands",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Senegal",
+    "Norway",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Gabriel": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "Paraguay",
+    "United States",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ivory Coast",
+    "Ecuador",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Algeria",
+    "Austria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Leandro": {
+   "A": [
+    "South Korea",
+    "Mexico",
+    "South Africa",
+    "Czechia"
+   ],
+   "B": [
+    "Switzerland",
+    "Bosnia-Herzegovina",
+    "Canada",
+    "Qatar"
+   ],
+   "C": [
+    "Morocco",
+    "Brazil",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "United States",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Curaçao",
+    "Ivory Coast"
+   ],
+   "F": [
+    "Netherlands",
+    "Sweden",
+    "Tunisia",
+    "Japan"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "New Zealand",
+    "Iran"
+   ],
+   "H": [
+    "Uruguay",
+    "Spain",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Algeria",
+    "Austria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Lucas Volcov": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "United States",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Junior": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Qatar",
+    "Bosnia-Herzegovina"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Paraguay",
+    "United States",
+    "Turkey",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Japan",
+    "Netherlands",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Senegal",
+    "Norway",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Algeria",
+    "Austria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Uzbekistan",
+    "Congo DR"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Alisson": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "South Africa",
+    "Czechia"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "New Zealand",
+    "Iran"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Panama",
+    "Ghana"
+   ]
+  },
+  "Thiago": {
+   "A": [
+    "Mexico",
+    "Czechia",
+    "South Korea",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Douglas": {
+   "A": [
+    "Mexico",
+    "Czechia",
+    "South Korea",
+    "South Africa"
+   ],
+   "B": [
+    "Canada",
+    "Switzerland",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Australia",
+    "Paraguay"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Iran",
+    "Egypt",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Cape Verde Islands",
+    "Saudi Arabia"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Uzbekistan",
+    "Congo DR"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Guilherme B.": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Qatar",
+    "Bosnia-Herzegovina"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Australia",
+    "Paraguay"
+   ],
+   "E": [
+    "Germany",
+    "Ivory Coast",
+    "Ecuador",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Cape Verde Islands",
+    "Saudi Arabia",
+    "Uruguay"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Algeria",
+    "Austria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Osmar": {
+   "A": [
+    "South Korea",
+    "South Africa",
+    "Mexico",
+    "Czechia"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Qatar",
+    "Bosnia-Herzegovina"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "Paraguay",
+    "United States",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ivory Coast",
+    "Ecuador",
+    "Curaçao"
+   ],
+   "F": [
+    "Japan",
+    "Netherlands",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "New Zealand",
+    "Iran"
+   ],
+   "H": [
+    "Spain",
+    "Cape Verde Islands",
+    "Uruguay",
+    "Saudi Arabia"
+   ],
+   "I": [
+    "France",
+    "Senegal",
+    "Norway",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Jordan",
+    "Austria",
+    "Algeria"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Andrew": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Cape Verde Islands",
+    "Saudi Arabia"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Pedro": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Canada",
+    "Switzerland",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "United States",
+    "Turkey",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Iran",
+    "Egypt",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Norway",
+    "Senegal",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Algeria",
+    "Austria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Manuel": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "Czechia",
+    "South Africa"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "United States",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ecuador",
+    "Ivory Coast",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Belgium",
+    "Egypt",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "France",
+    "Senegal",
+    "Norway",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Austria",
+    "Algeria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Uzbekistan",
+    "Congo DR"
+   ],
+   "L": [
+    "England",
+    "Croatia",
+    "Ghana",
+    "Panama"
+   ]
+  },
+  "Murilo": {
+   "A": [
+    "Mexico",
+    "South Korea",
+    "South Africa",
+    "Czechia"
+   ],
+   "B": [
+    "Switzerland",
+    "Canada",
+    "Bosnia-Herzegovina",
+    "Qatar"
+   ],
+   "C": [
+    "Brazil",
+    "Morocco",
+    "Scotland",
+    "Haiti"
+   ],
+   "D": [
+    "Turkey",
+    "United States",
+    "Paraguay",
+    "Australia"
+   ],
+   "E": [
+    "Germany",
+    "Ivory Coast",
+    "Ecuador",
+    "Curaçao"
+   ],
+   "F": [
+    "Netherlands",
+    "Japan",
+    "Sweden",
+    "Tunisia"
+   ],
+   "G": [
+    "Egypt",
+    "Belgium",
+    "Iran",
+    "New Zealand"
+   ],
+   "H": [
+    "Spain",
+    "Uruguay",
+    "Saudi Arabia",
+    "Cape Verde Islands"
+   ],
+   "I": [
+    "Norway",
+    "Senegal",
+    "France",
+    "Iraq"
+   ],
+   "J": [
+    "Argentina",
+    "Algeria",
+    "Austria",
+    "Jordan"
+   ],
+   "K": [
+    "Portugal",
+    "Colombia",
+    "Congo DR",
+    "Uzbekistan"
+   ],
+   "L": [
+    "England",
+    "Ghana",
+    "Croatia",
+    "Panama"
+   ]
+  }
+ }
+}
