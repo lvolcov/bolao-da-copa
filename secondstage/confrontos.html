@@ -26,7 +26,7 @@
   <script src="./data.js"></script>
   <script src="./common.js"></script>
   <script>
-    const { K, renderNav, crest, favorite } = BOLAO;
+    const { K, renderNav, crest, favorite, fmtKick, isPastMatch, byKickoff } = BOLAO;
     renderNav("vnav");
     const NP = K.players.length;
     // só fases já definidas (com palpites reais) — nada de confronto projetado/inventado
@@ -50,7 +50,7 @@
         : `<b class="text-emerald-300">${s.full}</b> · ${sub}/${NP} apostadores já votaram`;
 
       const el = document.getElementById("matches");
-      el.innerHTML = s.matches.map((m, i) => {
+      const card = (m) => {
         const tot = m.tallyA + m.tallyB, pa = tot ? Math.round(m.tallyA / tot * 100) : 50, pb = 100 - pa;
         const decided = !!m.winner;
         const aWon = decided && m.winner === m.a, bWon = decided && m.winner === m.b;
@@ -70,7 +70,7 @@
         return `
         <div class="rounded-2xl border ${decided ? "border-emerald-500/40" : proj ? "border-dashed border-slate-700/70" : "border-slate-800"} bg-slate-900 p-4">
           <div class="mb-2 flex items-center justify-between text-[0.65rem] font-bold uppercase tracking-wider text-slate-600">
-            <span>${s.label} · ${i + 1}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}</span>` : proj ? `<span class="text-amber-500/80">projeção</span>` : `<span>${tot}/${NP}</span>`}
+            <span>${m.date ? fmtKick(m.date) : s.label}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}</span>` : proj ? `<span class="text-amber-500/80">projeção</span>` : `<span>${tot}/${NP}</span>`}
           </div>
           <div class="flex items-center gap-2">
             ${side(m.a, m.crestA, m.tallyA, aHi, aWon, "l")}
@@ -89,7 +89,15 @@
             <div class="text-right"><p class="font-semibold ${bWon ? "text-emerald-300" : "text-slate-400"}">${m.b}</p>${m.backB.map(p => `<p class="${decided ? (bWon ? "text-emerald-400" : "text-slate-600 line-through") : "text-slate-500"}">${p}</p>`).join("") || '<p class="text-slate-700">—</p>'}</div>
           </div>`}
         </div>`;
-      }).join("");
+      };
+
+      const ordered = [...s.matches].sort(byKickoff);
+      const live = ordered.filter(m => !isPastMatch(m));
+      const past = ordered.filter(isPastMatch);
+      const sep = (t) => `<div class="col-span-full mt-2 flex items-center gap-3"><span class="text-xs font-bold uppercase tracking-wider text-slate-500">${t}</span><span class="h-px flex-1 bg-slate-800"></span></div>`;
+      el.innerHTML =
+        live.map(card).join("") +
+        (past.length ? sep("Encerrados") + past.map(card).join("") : "");
     }
 
     document.getElementById("stages").addEventListener("click", e => {

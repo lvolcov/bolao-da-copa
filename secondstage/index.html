@@ -61,7 +61,7 @@
   <script src="./data.js"></script>
   <script src="./common.js"></script>
   <script>
-    const { K, renderNav, crestOf, crest, score } = BOLAO;
+    const { K, renderNav, crestOf, crest, score, byKickoff } = BOLAO;
     renderNav("vnav");
 
     const active = K.stages.find(s => s.active);
@@ -84,7 +84,8 @@
     document.getElementById("board").innerHTML = rows.map((r, i) => {
       const rank = i + 1, lead = rank <= 3;
       const picks = active.picks[r.player] || [];
-      const detail = active.matches.map((m, j) => {
+      const ordered = active.matches.map((m, j) => ({ m, j })).sort((a, b) => byKickoff(a.m, b.m));
+      const detail = ordered.map(({ m, j }) => {
         const v = picks[j];
         if (!v) return `<li class="py-0.5 text-slate-700">${m.a} / ${m.b} — <span class="text-amber-600">sem palpite</span></li>`;
         if (m.winner) {

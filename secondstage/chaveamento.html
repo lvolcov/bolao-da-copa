@@ -28,7 +28,7 @@
   <script src="./data.js"></script>
   <script src="./common.js"></script>
   <script>
-    const { K, renderNav, crest } = BOLAO;
+    const { K, renderNav, crest, fmtKick } = BOLAO;
     renderNav("vnav");
 
     const r32 = K.stages.find(s => s.key === "r32");
@@ -38,7 +38,7 @@
       const b = { name: m.b, crest: m.crestB, votes: m.tallyB, backers: m.backB || [] };
       const decided = !!m.winner;
       const won = decided ? (m.winner === m.a ? "a" : "b") : null;
-      return { a, b, favA: m.tallyA >= m.tallyB, decided, won };
+      return { a, b, favA: m.tallyA >= m.tallyB, decided, won, date: m.date };
     });
     const winners = round1.map(m => m.decided ? (m.won === "a" ? m.a : m.b) : (m.favA ? m.a : m.b));
     // round 2 (oitavas): pair the projected winners
@@ -71,6 +71,7 @@
       };
       return `<div data-ko="${i}" tabindex="0" class="cursor-pointer rounded-xl border ${m.decided ? "border-emerald-500/40" : "border-slate-800"} bg-slate-900 p-1.5 transition hover:border-emerald-400/60 focus:outline-none focus:ring-1 focus:ring-emerald-500/50">
           ${teamRow(m.a, hiA, m.decided && m.won === "a", m.decided && m.won !== "a")}${teamRow(m.b, !hiA, m.decided && m.won === "b", m.decided && m.won !== "b")}
+          ${m.date ? `<div class="px-2 pt-0.5 text-center text-[0.55rem] text-slate-600">${fmtKick(m.date)}</div>` : ""}
         </div>`;
     }).join("");
 

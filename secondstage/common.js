@@ -50,5 +50,19 @@ window.BOLAO = (() => {
     }).sort((a, b) => b.total - a.total || a.player.localeCompare(b.player));
   }
 
-  return { K, NAV, renderNav, crest, crestOf, favorite, score };
+  // kickoff time → compact local string, e.g. "dom 28/06 · 20:00"
+  function fmtKick(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    const wd = d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
+    const dm = d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+    const hm = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    return `${wd} ${dm} · ${hm}`;
+  }
+  // a match moves to "Encerrados" once it's been finished for ~a day
+  const isPastMatch = (m) => !!m.winner && m.date && (Date.now() - new Date(m.date).getTime()) > 864e5;
+  // chronological order by kickoff (matches without a date go last)
+  const byKickoff = (a, b) => (a.date || "9").localeCompare(b.date || "9");
+
+  return { K, NAV, renderNav, crest, crestOf, favorite, score, fmtKick, isPastMatch, byKickoff };
 })();

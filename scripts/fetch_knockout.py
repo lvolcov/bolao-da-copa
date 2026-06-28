@@ -131,14 +131,17 @@ def apply(payload: dict) -> None:
 
     applied = 0
     for r in payload["results"]:
-        if not r["winner"]:
-            continue
         stage = by_key.get(r["stage"])
         if not stage:
             continue
         pair = {r["home"], r["away"]}
         for m in stage["matches"]:
-            if {m["a"], m["b"]} == pair:
+            if {m["a"], m["b"]} != pair:
+                continue
+            # kickoff time (used by the pages to sort matches chronologically)
+            if r.get("utcDate"):
+                m["date"] = r["utcDate"]
+            if r["winner"]:
                 # store score from A's perspective (UI reads m.score)
                 score = r["score"]
                 if score and r["away"] == m["a"]:  # fixture orientation flipped
@@ -147,7 +150,7 @@ def apply(payload: dict) -> None:
                     m["winner"] = r["winner"]
                     m["score"] = score
                     applied += 1
-                break
+            break
 
     DATA_JS.write_text("window.KO=" + json.dumps(K, ensure_ascii=False) + ";\n", encoding="utf-8")
     print(f"Applied {applied} winner(s) to {DATA_JS}")

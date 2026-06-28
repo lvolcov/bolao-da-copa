@@ -1,5 +1,5 @@
 {
- "updated": "2026-06-28T19:44:46+00:00",
+ "updated": "2026-06-28T21:10:28+00:00",
  "results": [
   {
    "stage": "r32",
@@ -7,9 +7,9 @@
    "away": "Canadá",
    "homeEn": "South Africa",
    "awayEn": "Canada",
-   "status": "IN_PLAY",
-   "winner": null,
-   "score": "0-0",
+   "status": "FINISHED",
+   "winner": "Canadá",
+   "score": "0-1",
    "penalties": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-28T19:00:00Z"

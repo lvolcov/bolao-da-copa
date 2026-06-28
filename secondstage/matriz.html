@@ -26,7 +26,7 @@
   <script src="./data.js"></script>
   <script src="./common.js"></script>
   <script>
-    const { K, renderNav } = BOLAO;
+    const { K, renderNav, fmtKick, isPastMatch, byKickoff } = BOLAO;
     renderNav("vnav");
     const P = K.players, NP = P.length;
     let cur = K.stages.findIndex(s => s.active); if (cur < 0) cur = 0;
@@ -53,21 +53,29 @@
           return `<th data-pl="${p}" class="cursor-pointer px-2 py-2 text-center font-semibold ${has ? "text-slate-300" : "text-slate-600"} hover:text-emerald-300"><span class="block max-w-[4.5rem] truncate">${p.split(" ")[0]}</span>${has ? "" : '<span class="text-[0.55rem] text-amber-500">pend.</span>'}</th>`;
         }).join("");
 
-      const body = s.matches.map((m, i) => {
+      const row = ({ m, i }) => {
         const cells = P.map(p => {
           const v = (s.picks[p] || [])[i];
           if (!v) return `<td data-pl="${p}" class="border-t border-slate-800 px-2 py-1.5 text-center text-slate-700">·</td>`;
-          const top = v === m.a;
-          return `<td data-pl="${p}" class="border-t border-slate-800 px-2 py-1.5 text-center"><span class="inline-block max-w-[4.5rem] truncate rounded px-1.5 py-0.5 text-[0.7rem] font-medium ${top ? "bg-emerald-500/15 text-emerald-300" : "bg-sky-500/15 text-sky-300"}">${short(v)}</span></td>`;
+          const top = v === m.a, isWin = m.winner && v === m.winner, isLose = m.winner && v !== m.winner;
+          return `<td data-pl="${p}" class="border-t border-slate-800 px-2 py-1.5 text-center"><span class="inline-block max-w-[4.5rem] truncate rounded px-1.5 py-0.5 text-[0.7rem] font-medium ${isWin ? "bg-emerald-500/30 text-emerald-200 ring-1 ring-emerald-500/40" : isLose ? "bg-slate-800 text-slate-600 line-through" : top ? "bg-emerald-500/15 text-emerald-300" : "bg-sky-500/15 text-sky-300"}">${short(v)}</span></td>`;
         }).join("");
         return `<tr class="hover:bg-slate-900/40">
           <th class="sticky left-0 z-10 bg-slate-950 px-3 py-1.5 text-left">
             <div class="flex items-center gap-1 whitespace-nowrap">
-              <img src="${m.crestA}" class="h-4 w-4 object-contain"><span class="text-emerald-300/90">${short(m.a)}</span>
+              <img src="${m.crestA}" class="h-4 w-4 object-contain"><span class="${m.winner === m.a ? "text-emerald-300 font-bold" : "text-emerald-300/90"}">${short(m.a)}</span>
               <span class="text-slate-600">/</span>
-              <img src="${m.crestB}" class="h-4 w-4 object-contain"><span class="text-sky-300/90">${short(m.b)}</span>
-            </div></th>${cells}</tr>`;
-      }).join("");
+              <img src="${m.crestB}" class="h-4 w-4 object-contain"><span class="${m.winner === m.b ? "text-sky-300 font-bold" : "text-sky-300/90"}">${short(m.b)}</span>
+            </div>
+            <div class="mt-0.5 text-[0.6rem] font-normal normal-case text-slate-500">${m.date ? fmtKick(m.date) : ""}${m.winner ? ` · ✅ ${short(m.winner)}` : ""}</div>
+          </th>${cells}</tr>`;
+      };
+
+      const ordered = s.matches.map((m, i) => ({ m, i })).sort((a, b) => byKickoff(a.m, b.m));
+      const live = ordered.filter(x => !isPastMatch(x.m));
+      const past = ordered.filter(x => isPastMatch(x.m));
+      const sepRow = `<tr><td colspan="${NP + 1}" class="border-t border-slate-800 bg-slate-900 px-3 py-1.5 text-[0.6rem] font-bold uppercase tracking-wider text-slate-500">Encerrados</td></tr>`;
+      const body = live.map(row).join("") + (past.length ? sepRow + past.map(row).join("") : "");
 
       document.getElementById("wrap").innerHTML = `<table class="min-w-full border-collapse text-xs"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
 
