@@ -36,6 +36,11 @@ jobs:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
         run: python scripts/fetch_standings.py
 
+      - name: Fetch knockout results
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+        run: python scripts/fetch_knockout.py --no-apply
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 

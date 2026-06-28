@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bolão da Copa 2026 · Classificação</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:["Inter","sans-serif"],display:["'Plus Jakarta Sans'","sans-serif"]}}}};</script>
+  <style>body{font-family:Inter,sans-serif}.font-display{font-family:'Plus Jakarta Sans',sans-serif}</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <div class="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+    <nav id="vnav" class="mb-5 flex flex-wrap gap-2 text-xs font-semibold"></nav>
+
+    <header class="relative isolate overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 px-6 py-9 sm:px-10">
+      <img src="./logo.png" alt="" class="pointer-events-none absolute -right-5 top-1/2 h-40 w-40 -translate-y-1/2 opacity-20 sm:h-52 sm:w-52" onerror="this.style.display='none'" />
+      <div class="relative max-w-xl">
+        <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-emerald-400">Copa do Mundo 2026 · Mata-mata</p>
+        <h1 class="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-5xl">Classificação <span class="text-emerald-400">Geral</span> 🏆</h1>
+        <p class="mt-2 text-sm text-slate-400 sm:text-base">Pontos da fase de grupos (1 por posição) <b class="text-slate-200">+ 2 por acerto</b> em cada rodada do mata-mata. Toque num nome para ver a distribuição por fase.</p>
+        <p id="stagebar" class="mt-3 text-xs text-slate-500"></p>
+      </div>
+    </header>
+
+    <section class="mt-6">
+      <div id="board" class="grid gap-2"></div>
+    </section>
+
+    <footer class="mt-10 text-center text-xs text-slate-500">Bolão da Pelada MCR · <a class="text-emerald-400 hover:underline" href="https://lvolcov.github.io/pelada-mcr-stats/">Pelada MCR Stats</a></footer>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./common.js"></script>
+  <script>
+    const { K, renderNav, crestOf, crest, score } = BOLAO;
+    renderNav("vnav");
+
+    const active = K.stages.find(s => s.active);
+    const subActive = K.players.filter(p => (active.picks[p] || []).some(Boolean)).length;
+    document.getElementById("stagebar").innerHTML =
+      `Fase atual: <b class="text-emerald-300">${active.full}</b> · <b class="text-slate-300">${subActive}</b>/${K.players.length} já palpitaram · próximas fases já visíveis em <a href="./chaveamento.html" class="text-emerald-400 hover:underline">Chaveamento</a>`;
+
+    const medal = (r) => r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : `${r}º`;
+    const rows = score();
+    const stageChips = (r) => {
+      const chips = [`<span class="rounded bg-slate-800 px-1.5 py-0.5"><span class="text-slate-500">Grupos</span> <b class="text-slate-200">${r.group}</b></span>`];
+      for (const s of K.stages) {
+        const pts = r.byStage[s.key];
+        const pend = s.active && !r.submitted[s.key];
+        chips.push(`<span class="rounded ${pend ? "bg-amber-500/10" : "bg-slate-800"} px-1.5 py-0.5"><span class="text-slate-500">${s.label}</span> <b class="${pts ? "text-emerald-300" : pend ? "text-amber-400" : "text-slate-400"}">${pend ? "—" : "+" + pts}</b></span>`);
+      }
+      return chips.join("");
+    };
+
+    document.getElementById("board").innerHTML = rows.map((r, i) => {
+      const rank = i + 1, lead = rank <= 3;
+      const picks = active.picks[r.player] || [];
+      const detail = active.matches.map((m, j) => {
+        const v = picks[j];
+        if (!v) return `<li class="py-0.5 text-slate-700">${m.a} / ${m.b} — <span class="text-amber-600">sem palpite</span></li>`;
+        if (m.winner) {
+          const ok = v === m.winner;
+          return `<li class="flex items-center gap-1.5 py-0.5">${crest(crestOf(v), "h-4 w-4")}<span class="${ok ? "text-emerald-300" : "text-slate-500 line-through decoration-slate-700"}">${v}</span><span class="text-[0.65rem] ${ok ? "text-emerald-400" : "text-slate-600"}">${ok ? "· ✓ +2" : "· ✗"}</span></li>`;
+        }
+        const fav = BOLAO.favorite(m), withCrowd = v === fav;
+        return `<li class="flex items-center gap-1.5 py-0.5">${crest(crestOf(v), "h-4 w-4")}<span class="text-slate-300">${v}</span><span class="text-[0.65rem] ${withCrowd ? "text-emerald-500/70" : "text-slate-600"}">${withCrowd ? "· maioria" : "· zebra"}</span></li>`;
+      }).join("");
+      return `
+      <div class="rounded-xl border ${lead ? "border-emerald-500/40 bg-emerald-500/5" : "border-slate-800 bg-slate-900"}">
+        <button class="flex w-full items-center gap-3 px-4 py-3 text-left" onclick="this.nextElementSibling.classList.toggle('hidden')">
+          <span class="w-7 shrink-0 text-center font-display text-lg font-extrabold ${lead ? "" : "text-slate-400"}">${medal(rank)}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate font-medium">${r.player}</span>
+            <span class="mt-1 flex flex-wrap gap-1 text-[0.65rem]">${stageChips(r)}</span>
+          </span>
+          <span class="shrink-0 text-right">
+            <span class="block font-display text-2xl font-extrabold leading-none tabular-nums text-emerald-400">${r.total}</span>
+            <span class="text-[0.6rem] uppercase tracking-wide text-slate-500">pontos</span>
+          </span>
+        </button>
+        <div class="hidden border-t border-slate-800 px-4 py-3">
+          <p class="mb-1 text-[0.65rem] font-bold uppercase tracking-wider text-slate-600">Palpites · ${active.full}</p>
+          <ul class="grid gap-0.5 text-sm sm:grid-cols-2">${detail}</ul>
+        </div>
+      </div>`;
+    }).join("");
+  </script>
+</body>
+</html>

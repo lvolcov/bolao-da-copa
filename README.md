@@ -40,8 +40,10 @@ public/ (deployed to GitHub Pages)
   └─ favicon.ico · *.png · logo   icons (favicon, apple-touch, 192/512)
 
 scripts/
-  ├─ fetch_standings.py           pulls WC standings (Action + local)
-  └─ build_predictions.py         regenerates predictions.json from the .xlsx
+  ├─ fetch_standings.py           pulls WC group standings (Action + local)
+  ├─ fetch_knockout.py            pulls knockout results + winners (Action + local)
+  ├─ build_predictions.py         regenerates predictions.json from the .xlsx
+  └─ build_data.py                regenerates secondstage/data.js from the .xlsx
 ```
 
 Scoring runs entirely in the browser: `app.js` loads the static `predictions.json`
@@ -80,6 +82,98 @@ The sheet's `PontuaçãoPorJogo` tab has one column per apostador; each group is
 finish (1st→4th). The script maps the Portuguese nation names to the English
 names the API uses and **fails loudly** if it meets an unmapped team (add it to
 `PT2EN` in the script).
+
+## Second stage — knockout (mata-mata)
+
+Once the group stage ends, the pool moves to the knockouts: each apostador picks
+the winner of every tie, **+2 points per correct pick**. This lives in its own set
+of pages under `secondstage/` and is currently **staged on the home server's
+internal port** (not yet promoted to GitHub Pages).
+
+```
+secondstage/            (served on the internal door — http://192.168.1.107:8137)
+  ├─ data.js            window.KO = ALL the data (see below). The single source of truth.
+  ├─ common.js          shared nav + scoring helper (group pts + 2 × acertos)
+  ├─ index.html         🏆 Classificação Geral — leaderboard + per-round breakdown
+  ├─ confrontos.html    ⚔️ match cards w/ consensus bars (only stages with picks)
+  ├─ matriz.html        🧮 matches × apostadores grid
+  ├─ chaveamento.html   🗺️ bracket: real votes for the live round, projection ahead
+  └─ grupos.html        📋 final group tables + each player's group-stage palpites
+```
+
+### The data model (`secondstage/data.js`)
+
+One object, `window.KO`, holds everything:
+
+- `players` — the 15 apostadores (order is canonical; the build scripts assert it).
+- `groupPoints` — group-stage points per player (from the sheet's TOTAL row).
+- `groupPreds` / `groupOrder` / `groupActual` / `teamMeta` — group palpites (English
+  names), final/partial group order, and an English→{pt,crest} lookup.
+- `groups` — the 12 final group tables (from `standings.json`).
+- `crests` — Portuguese team name → crest URL.
+- `stages` — the knockout rounds in order: `r32` (16-avos), `r16` (oitavas), `qf`,
+  `sf`, `final`. Each stage has:
+  - `key`, `label`, `full`, `weight` (2), `active` (the round being featured),
+  - `matches` — the **fixtures**: `{a, b, crestA, crestB, tallyA, tallyB, backA,
+    backB, winner, score}`. `winner`/`score` are filled by `fetch_knockout.py`;
+    the tallies/backs are computed by `build_data.py` from everyone's picks.
+  - `picks` — `{player: [pick per match]}`.
+
+Scoring (in `common.js`) = `groupPoints` + Σ over stages of `2 × (picks that match
+the match winner)`. It updates automatically as winners land.
+
+### Serving the internal preview
+
+A throwaway service in `/opt/docker-compose.yaml` serves the folder:
+
+```bash
+cd /opt && docker compose up -d bolao-2fase-preview   # → http://192.168.1.107:8137
+```
+
+(It bind-mounts `secondstage/` read-only and runs `python -m http.server 8137`, so
+edits to the files show on the next refresh — no rebuild.)
+
+### Live knockout results
+
+`scripts/fetch_knockout.py` pulls `/competitions/WC/matches`, keeps the knockout
+stages (API codes `LAST_32→r32`, `LAST_16→r16`, `QUARTER_FINALS→qf`,
+`SEMI_FINALS→sf`, `FINAL→final`), resolves each finished tie's winner (extra
+time / penalties handled, with a penalty-score fallback), maps names to Portuguese,
+and **sets `winner`+`score`** on the matching confronto in `data.js`. The Action
+runs it with `--no-apply` (only refreshes `public/knockout_results.json`); to update
+the door run it for real on the server:
+
+```bash
+cd /opt/bolao-da-copa && set -a && . ./.env && set +a && python3 scripts/fetch_knockout.py
+```
+
+(The API token lives in `/opt/bolao-da-copa/.env` — git-ignored. `.env` has
+`FOOTBALL_DATA_TOKEN=…`.)
+
+### ✅ Updating for the next stage (oitavas → final)
+
+When a round finishes and the next one opens, do this in order:
+
+1. **Score the round that just ended** — run `fetch_knockout.py` (command above).
+   The leaderboard and result UI update automatically.
+2. **Set the next stage's real fixtures in `data.js`.** Until a round is drawn its
+   `matches` are a *projection* (favorites paired). Replace that stage's `matches`
+   with the real 8/4/2/1 confrontos — `knockout_results.json` lists the drawn
+   fixtures (home/away). Set `a`, `b`, `crestA`, `crestB` (crests come from
+   `K.crests` / `teamMeta`); leave `tally*`/`back*`/`winner` empty.
+3. **Load the new picks.** When the apostadores submit, drop the updated Excel in
+   the repo root and run:
+   ```bash
+   cd /opt/bolao-da-copa && python3 scripts/build_data.py
+   ```
+   It reads the sheet, fills that stage's `picks`, recomputes the tallies/who-voted,
+   refreshes the group data, and flips `active` to the most advanced stage with
+   picks. It **fails loudly** if a pick isn't one of the two fixture teams (means
+   the fixtures in step 2 are wrong or the sheet's match order changed) — and if the
+   sheet labels the new block differently, add its prefix to `SECTION_MAP` in the
+   script (e.g. the round-of-32 block is labelled `"Round 16"`).
+4. **Refresh the door** (just reload — the preview reads the files live) and review.
+5. When happy, delete the `.xlsx` from the repo root (the data now lives in `data.js`).
 
 ## Local preview
 

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bolão · Confrontos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:["Inter","sans-serif"],display:["'Plus Jakarta Sans'","sans-serif"]}}}};</script>
+  <style>body{font-family:Inter,sans-serif}.font-display{font-family:'Plus Jakarta Sans',sans-serif}</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+    <nav id="vnav" class="mb-5 flex flex-wrap gap-2 text-xs font-semibold"></nav>
+    <header class="rounded-3xl border border-slate-800 bg-slate-900 px-6 py-8">
+      <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-emerald-400">Mata-mata</p>
+      <h1 class="mt-1 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Confrontos ⚔️</h1>
+      <p class="mt-2 max-w-xl text-sm text-slate-400">Quem o bolão acha que avança em cada confronto. Cada acerto vale +2 pontos.</p>
+      <div id="stages" class="mt-4 flex flex-wrap gap-2 text-xs font-semibold"></div>
+      <p id="note" class="mt-3 text-xs text-slate-500"></p>
+    </header>
+    <section id="matches" class="mt-6 grid gap-3 sm:grid-cols-2"></section>
+    <footer class="mt-10 text-center text-xs text-slate-500">Bolão da Pelada MCR</footer>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./common.js"></script>
+  <script>
+    const { K, renderNav, crest, favorite } = BOLAO;
+    renderNav("vnav");
+    const NP = K.players.length;
+    // só fases já definidas (com palpites reais) — nada de confronto projetado/inventado
+    const hasPicks = (s) => K.players.some(p => (s.picks[p] || []).some(Boolean));
+    const stages = K.stages.filter(hasPicks);
+    let cur = 0;
+
+    function renderStages() {
+      // esconde o seletor se só houver uma fase aberta
+      document.getElementById("stages").innerHTML = stages.length > 1 ? stages.map((s, i) =>
+        `<button data-i="${i}" class="rounded-full border px-3 py-1.5 ${i === cur ? "border-emerald-400 bg-emerald-500/10 text-emerald-300" : "border-slate-700 text-slate-400 hover:border-slate-500"}">${s.label}</button>`
+      ).join("") : "";
+    }
+
+    function draw() {
+      const s = stages[cur];
+      const proj = !s.active;
+      const sub = K.players.filter(p => (s.picks[p] || []).some(Boolean)).length;
+      document.getElementById("note").innerHTML = proj
+        ? `⏳ <b class="text-amber-300">${s.full}</b> ainda não começou — mostrando a <b>projeção</b> pelos favoritos do bolão. Os palpites de verdade entram quando a fase abrir.`
+        : `<b class="text-emerald-300">${s.full}</b> · ${sub}/${NP} apostadores já votaram`;
+
+      const el = document.getElementById("matches");
+      el.innerHTML = s.matches.map((m, i) => {
+        const tot = m.tallyA + m.tallyB, pa = tot ? Math.round(m.tallyA / tot * 100) : 50, pb = 100 - pa;
+        const decided = !!m.winner;
+        const aWon = decided && m.winner === m.a, bWon = decided && m.winner === m.b;
+        // quem destacar: vencedor real se já decidido, senão a maioria
+        const aHi = decided ? aWon : m.tallyA > m.tallyB;
+        const bHi = decided ? bWon : m.tallyB > m.tallyA;
+        const hitsA = m.backA.length, hitsB = m.backB.length;
+        const correct = decided ? (aWon ? hitsA : hitsB) : null;
+        const side = (name, c, n, hi, won, align) => `
+          <div class="flex flex-1 items-center gap-2 ${align === "r" ? "flex-row-reverse text-right" : ""}">
+            ${crest(c, "h-6 w-6")}
+            <div class="flex flex-col ${align === "r" ? "items-end" : ""}">
+              <span class="flex items-center gap-1 text-sm font-semibold leading-tight ${hi ? "text-emerald-300" : decided ? "text-slate-500 line-through decoration-slate-700" : "text-slate-300"}">${won ? "✅ " : ""}${name}</span>
+              ${proj ? "" : `<span class="text-xs ${hi ? "text-emerald-400" : "text-slate-500"}">${n} voto${n === 1 ? "" : "s"}</span>`}
+            </div>
+          </div>`;
+        return `
+        <div class="rounded-2xl border ${decided ? "border-emerald-500/40" : proj ? "border-dashed border-slate-700/70" : "border-slate-800"} bg-slate-900 p-4">
+          <div class="mb-2 flex items-center justify-between text-[0.65rem] font-bold uppercase tracking-wider text-slate-600">
+            <span>${s.label} · ${i + 1}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}</span>` : proj ? `<span class="text-amber-500/80">projeção</span>` : `<span>${tot}/${NP}</span>`}
+          </div>
+          <div class="flex items-center gap-2">
+            ${side(m.a, m.crestA, m.tallyA, aHi, aWon, "l")}
+            <span class="px-1 text-xs font-bold text-slate-600">×</span>
+            ${side(m.b, m.crestB, m.tallyB, bHi, bWon, "r")}
+          </div>
+          ${proj ? "" : `
+          <div class="mt-3 flex h-2 overflow-hidden rounded-full bg-slate-800">
+            <div class="${aHi ? "bg-emerald-500" : "bg-slate-600"}" style="width:${pa}%"></div>
+            <div class="${bHi ? "bg-emerald-500" : "bg-slate-600"}" style="width:${pb}%"></div>
+          </div>
+          ${decided ? `<p class="mt-2 text-xs text-slate-400"><b class="text-emerald-300">${correct}</b>/${tot} apostadores acertaram · <b class="text-emerald-300">+2</b> pra cada</p>` : ""}
+          <button class="mt-2 text-[0.7rem] text-slate-500 hover:text-emerald-400" onclick="this.nextElementSibling.classList.toggle('hidden')">ver quem votou ▾</button>
+          <div class="hidden mt-2 grid grid-cols-2 gap-x-3 text-xs">
+            <div><p class="font-semibold ${aWon ? "text-emerald-300" : "text-slate-400"}">${m.a}</p>${m.backA.map(p => `<p class="${decided ? (aWon ? "text-emerald-400" : "text-slate-600 line-through") : "text-slate-500"}">${p}</p>`).join("") || '<p class="text-slate-700">—</p>'}</div>
+            <div class="text-right"><p class="font-semibold ${bWon ? "text-emerald-300" : "text-slate-400"}">${m.b}</p>${m.backB.map(p => `<p class="${decided ? (bWon ? "text-emerald-400" : "text-slate-600 line-through") : "text-slate-500"}">${p}</p>`).join("") || '<p class="text-slate-700">—</p>'}</div>
+          </div>`}
+        </div>`;
+      }).join("");
+    }
+
+    document.getElementById("stages").addEventListener("click", e => {
+      const b = e.target.closest("[data-i]"); if (!b) return;
+      cur = +b.dataset.i; renderStages(); draw();
+    });
+    renderStages(); draw();
+  </script>
+</body>
+</html>

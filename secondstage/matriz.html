@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bolão · Matriz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:["Inter","sans-serif"],display:["'Plus Jakarta Sans'","sans-serif"]}}}};</script>
+  <style>body{font-family:Inter,sans-serif}.font-display{font-family:'Plus Jakarta Sans',sans-serif}</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+    <nav id="vnav" class="mb-5 flex flex-wrap gap-2 text-xs font-semibold"></nav>
+    <header class="rounded-3xl border border-slate-800 bg-slate-900 px-6 py-8">
+      <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-emerald-400">Mata-mata</p>
+      <h1 class="mt-1 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Matriz de palpites 🧮</h1>
+      <p class="mt-2 max-w-2xl text-sm text-slate-400"><span class="font-semibold text-emerald-300">Verde</span> = time de cima, <span class="font-semibold text-sky-300">azul</span> = time de baixo. Toque num apostador para destacar a coluna.</p>
+      <div id="stages" class="mt-4 flex flex-wrap gap-2 text-xs font-semibold"></div>
+      <p id="note" class="mt-3 text-xs text-slate-500"></p>
+    </header>
+    <div id="wrap" class="mt-6 overflow-x-auto rounded-2xl border border-slate-800"></div>
+    <footer class="mt-10 text-center text-xs text-slate-500">Bolão da Pelada MCR · +2 por acerto</footer>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./common.js"></script>
+  <script>
+    const { K, renderNav } = BOLAO;
+    renderNav("vnav");
+    const P = K.players, NP = P.length;
+    let cur = K.stages.findIndex(s => s.active); if (cur < 0) cur = 0;
+    const short = (t) => t && t.length > 11 ? t.slice(0, 10) + "…" : t;
+
+    function renderStages() {
+      document.getElementById("stages").innerHTML = K.stages.map((s, i) =>
+        `<button data-i="${i}" class="rounded-full border px-3 py-1.5 ${i === cur ? "border-emerald-400 bg-emerald-500/10 text-emerald-300" : "border-slate-700 text-slate-400 hover:border-slate-500"}">${s.label}</button>`
+      ).join("");
+    }
+
+    function draw() {
+      const s = K.stages[cur];
+      if (!s.active) {
+        document.getElementById("note").innerHTML = `⏳ <b class="text-amber-300">${s.full}</b> ainda não abriu para palpites.`;
+        document.getElementById("wrap").innerHTML = `<div class="p-8 text-center text-sm text-slate-500">Sem palpites nesta fase ainda. Veja a projeção em <a href="./chaveamento.html" class="text-emerald-400 hover:underline">Chaveamento</a>.</div>`;
+        return;
+      }
+      const sub = P.filter(p => (s.picks[p] || []).some(Boolean));
+      document.getElementById("note").innerHTML = `<b class="text-emerald-300">${s.full}</b> · ${sub.length}/${NP} enviaram · pendentes: ${P.filter(p => !(s.picks[p] || []).some(Boolean)).join(", ") || "nenhum"}`;
+
+      const head = `<th class="sticky left-0 z-10 bg-slate-900 px-3 py-2 text-left text-[0.6rem] uppercase tracking-wider text-slate-500">Confronto</th>` +
+        P.map(p => { const has = (s.picks[p] || []).some(Boolean);
+          return `<th data-pl="${p}" class="cursor-pointer px-2 py-2 text-center font-semibold ${has ? "text-slate-300" : "text-slate-600"} hover:text-emerald-300"><span class="block max-w-[4.5rem] truncate">${p.split(" ")[0]}</span>${has ? "" : '<span class="text-[0.55rem] text-amber-500">pend.</span>'}</th>`;
+        }).join("");
+
+      const body = s.matches.map((m, i) => {
+        const cells = P.map(p => {
+          const v = (s.picks[p] || [])[i];
+          if (!v) return `<td data-pl="${p}" class="border-t border-slate-800 px-2 py-1.5 text-center text-slate-700">·</td>`;
+          const top = v === m.a;
+          return `<td data-pl="${p}" class="border-t border-slate-800 px-2 py-1.5 text-center"><span class="inline-block max-w-[4.5rem] truncate rounded px-1.5 py-0.5 text-[0.7rem] font-medium ${top ? "bg-emerald-500/15 text-emerald-300" : "bg-sky-500/15 text-sky-300"}">${short(v)}</span></td>`;
+        }).join("");
+        return `<tr class="hover:bg-slate-900/40">
+          <th class="sticky left-0 z-10 bg-slate-950 px-3 py-1.5 text-left">
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <img src="${m.crestA}" class="h-4 w-4 object-contain"><span class="text-emerald-300/90">${short(m.a)}</span>
+              <span class="text-slate-600">/</span>
+              <img src="${m.crestB}" class="h-4 w-4 object-contain"><span class="text-sky-300/90">${short(m.b)}</span>
+            </div></th>${cells}</tr>`;
+      }).join("");
+
+      document.getElementById("wrap").innerHTML = `<table class="min-w-full border-collapse text-xs"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+
+      let activeCol = null;
+      document.querySelector("#wrap table").addEventListener("click", e => {
+        const t = e.target.closest("[data-pl]"); if (!t) return;
+        const pl = t.dataset.pl; activeCol = activeCol === pl ? null : pl;
+        document.querySelectorAll("[data-pl]").forEach(c => {
+          const on = activeCol && c.dataset.pl === activeCol;
+          c.classList.toggle("ring-2", on); c.classList.toggle("ring-emerald-500/60", on); c.classList.toggle("ring-inset", on);
+        });
+      });
+    }
+
+    document.getElementById("stages").addEventListener("click", e => {
+      const b = e.target.closest("[data-i]"); if (!b) return; cur = +b.dataset.i; renderStages(); draw();
+    });
+    renderStages(); draw();
+  </script>
+</body>
+</html>

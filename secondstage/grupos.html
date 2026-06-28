@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bolão · Grupos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:["Inter","sans-serif"],display:["'Plus Jakarta Sans'","sans-serif"]}}}};</script>
+  <style>body{font-family:Inter,sans-serif}.font-display{font-family:'Plus Jakarta Sans',sans-serif}</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+    <nav id="vnav" class="mb-5 flex flex-wrap gap-2 text-xs font-semibold"></nav>
+    <header class="rounded-3xl border border-slate-800 bg-slate-900 px-6 py-8">
+      <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-emerald-400">Fase de grupos</p>
+      <h1 class="mt-1 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Grupos & Palpites 📋</h1>
+      <p class="mt-2 text-sm text-slate-400">Classificação final dos grupos e os <b class="text-slate-200">palpites de cada apostador</b> (1 ponto por posição exata).</p>
+    </header>
+
+    <!-- Palpites da fase de grupos -->
+    <section class="mt-6 rounded-3xl border border-slate-800 bg-slate-900/50 p-5">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="font-display text-lg font-extrabold">Palpites por apostador</h2>
+        <select id="player" class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-medium focus:border-emerald-400 focus:outline-none"></select>
+      </div>
+      <p id="psummary" class="mt-2 text-xs text-slate-500"></p>
+      <div id="palpites" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </section>
+
+    <!-- Tabelas finais -->
+    <h2 class="mt-8 mb-3 font-display text-lg font-extrabold">Tabelas dos grupos</h2>
+    <div id="groups" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <footer class="mt-10 text-center text-xs text-slate-500">Dados: football-data.org · Bolão da Pelada MCR</footer>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./common.js"></script>
+  <script>
+    const { K, renderNav } = BOLAO;
+    renderNav("vnav");
+    const POS = { 0: "1º", 1: "2º", 2: "3º", 3: "4º" };
+    const fmtGD = (v) => v == null ? "0" : v > 0 ? `+${v}` : `${v}`;
+    const meta = (en) => K.teamMeta[en] || { pt: en, crest: "" };
+    const crestImg = (c) => c ? `<img src="${c}" class="h-4 w-4 shrink-0 object-contain" loading="lazy">` : `<span class="h-4 w-4 shrink-0"></span>`;
+
+    // ---- final group tables ----
+    document.getElementById("groups").innerHTML = Object.entries(K.groups)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([g, table]) => {
+        const decided = !!K.groupActual[g];
+        const rows = [...table].sort((a, b) => a.position - b.position).map(t => {
+          const top2 = decided && t.position <= 2;
+          return `<tr class="${top2 ? "" : "text-slate-400"}">
+            <td class="py-1 pr-2 text-center text-xs ${top2 ? "font-bold text-emerald-400" : "text-slate-500"}">${t.position}</td>
+            <td class="py-1"><span class="flex items-center gap-2">${crestImg(t.crest)}<span class="truncate">${t.team}</span></span></td>
+            <td class="py-1 text-center tabular-nums text-xs">${t.played ?? 0}</td>
+            <td class="py-1 text-center tabular-nums text-xs">${fmtGD(t.gd)}</td>
+            <td class="py-1 text-right font-bold tabular-nums">${t.points ?? 0}</td>
+          </tr>`;
+        }).join("");
+        return `<div class="rounded-xl border border-slate-800 bg-slate-900 p-4">
+          <div class="mb-2 flex items-center justify-between">
+            <h3 class="font-display text-sm font-bold uppercase tracking-wide">Grupo ${g}</h3>
+            ${decided ? "" : `<span class="text-[0.6rem] uppercase tracking-wide text-amber-500/80">parcial</span>`}
+          </div>
+          <table class="w-full text-sm">
+            <thead><tr class="text-[0.65rem] uppercase tracking-wide text-slate-500">
+              <th class="pb-1"></th><th class="pb-1 text-left">Time</th><th class="pb-1">J</th><th class="pb-1">SG</th><th class="pb-1 text-right">P</th>
+            </tr></thead><tbody>${rows}</tbody></table>
+        </div>`;
+      }).join("");
+
+    // ---- per-player group predictions ----
+    const sel = document.getElementById("player");
+    sel.innerHTML = K.players.map(p => `<option value="${p}">${p}</option>`).join("");
+    if (K.players.includes("Lucas Volcov")) sel.value = "Lucas Volcov";
+
+    function drawPlayer(player) {
+      const preds = (K.groupPreds || {})[player] || {};
+      let totGot = 0, totScored = 0;
+      const cards = K.groupOrder.map(g => {
+        const pred = preds[g] || [];
+        const actual = K.groupActual[g]; // array of EN names, or null if pending
+        let got = 0;
+        const rows = pred.map((en, i) => {
+          const m = meta(en);
+          const ok = actual && en === actual[i];
+          if (ok) got++;
+          return `<li class="flex items-center justify-between gap-2 py-0.5 text-sm">
+              <span class="flex items-center gap-1.5 ${ok ? "text-emerald-300" : "text-slate-300"}">
+                <span class="w-5 text-xs text-slate-500">${POS[i]}</span>${crestImg(m.crest)}<span class="truncate">${m.pt}</span>
+              </span>
+              <span class="text-xs">${ok ? "✓" : actual ? "<span class='text-slate-700'>·</span>" : ""}</span>
+            </li>`;
+        }).join("");
+        if (actual) { totGot += got; totScored += 4; }
+        return `<div class="rounded-xl border border-slate-800 bg-slate-900 p-4">
+            <div class="mb-1 flex items-center justify-between">
+              <h3 class="font-display text-sm font-bold uppercase tracking-wide text-slate-400">Grupo ${g}</h3>
+              ${actual ? `<span class="text-xs font-bold text-emerald-400">${got}/4</span>` : `<span class="text-[0.6rem] uppercase tracking-wide text-amber-500/80">pendente</span>`}
+            </div>
+            <ul>${rows}</ul>
+          </div>`;
+      }).join("");
+      document.getElementById("palpites").innerHTML = cards;
+      document.getElementById("psummary").innerHTML =
+        `Acertos nos grupos já decididos: <b class="text-emerald-300">${totGot}</b>/${totScored} · pontos da fase de grupos: <b class="text-emerald-300">${K.groupPoints[player] ?? 0}</b>`;
+    }
+    sel.addEventListener("change", () => drawPlayer(sel.value));
+    drawPlayer(sel.value);
+  </script>
+</body>
+</html>
