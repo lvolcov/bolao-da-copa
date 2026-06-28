@@ -86,12 +86,14 @@ names the API uses and **fails loudly** if it meets an unmapped team (add it to
 ## Second stage — knockout (mata-mata)
 
 Once the group stage ends, the pool moves to the knockouts: each apostador picks
-the winner of every tie, **+2 points per correct pick**. This lives in its own set
-of pages under `secondstage/` and is currently **staged on the home server's
-internal port** (not yet promoted to GitHub Pages).
+the winner of every tie, **+2 points per correct pick**. This lives under
+`secondstage/` and is **the live GitHub Pages site** — the Action deploys this
+folder, so the homepage opens straight on the Classificação. (The old group-stage
+site stays in `public/` for reference but is no longer deployed.) It's also mirrored
+on the home server's internal door for staging.
 
 ```
-secondstage/            (served on the internal door — http://192.168.1.107:8137)
+secondstage/            (LIVE site → github pages + internal door http://192.168.1.107:8137)
   ├─ data.js            window.KO = ALL the data (see below). The single source of truth.
   ├─ common.js          shared nav + scoring helper (group pts + 2 × acertos)
   ├─ index.html         🏆 Classificação Geral — leaderboard + per-round breakdown
@@ -140,8 +142,8 @@ stages (API codes `LAST_32→r32`, `LAST_16→r16`, `QUARTER_FINALS→qf`,
 `SEMI_FINALS→sf`, `FINAL→final`), resolves each finished tie's winner (extra
 time / penalties handled, with a penalty-score fallback), maps names to Portuguese,
 and **sets `winner`+`score`** on the matching confronto in `data.js`. The Action
-runs it with `--no-apply` (only refreshes `public/knockout_results.json`); to update
-the door run it for real on the server:
+runs it for real on every deploy (so the live site auto-scores as matches finish);
+to update the internal door immediately, run it on the server:
 
 ```bash
 cd /opt/bolao-da-copa && set -a && . ./.env && set +a && python3 scripts/fetch_knockout.py

@@ -39,7 +39,7 @@ jobs:
       - name: Fetch knockout results
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
-        run: python scripts/fetch_knockout.py --no-apply
+        run: python scripts/fetch_knockout.py   # applies winners to secondstage/data.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
@@ -47,7 +47,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: public
+          path: secondstage
 
   deploy:
     needs: build
