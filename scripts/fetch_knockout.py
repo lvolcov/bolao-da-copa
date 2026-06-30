@@ -63,16 +63,20 @@ def to_pt(name: str | None) -> str | None:
 
 
 def resolve_winner(home: str, away: str, score: dict) -> str | None:
-    """Return the advancing club (English name) for a finished tie, or None."""
+    """Return the advancing club (English name) for a finished tie, or None.
+
+    After a shootout the API often leaves `winner` null and `penalties` tied at
+    the 5-round score (e.g. 5-5 before sudden death). `fullTime` carries the
+    decisive aggregate (incl. the shootout), so it's the most reliable signal.
+    """
     w = score.get("winner")
     if w == "HOME_TEAM":
         return home
     if w == "AWAY_TEAM":
         return away
-    # Penalty / draw edge case: derive from the shootout score if present.
-    if score.get("duration") in ("PENALTY_SHOOTOUT", "EXTRA_TIME"):
-        pens = score.get("penalties") or {}
-        h, a = pens.get("home"), pens.get("away")
+    for key in ("fullTime", "penalties"):  # fullTime first — it includes the shootout
+        d = score.get(key) or {}
+        h, a = d.get("home"), d.get("away")
         if h is not None and a is not None and h != a:
             return home if h > a else away
     return None
@@ -99,15 +103,27 @@ def fetch() -> dict:
         finished = m.get("status") == "FINISHED"
         winner_en = resolve_winner(home, away, score) if finished else None
         ft = score.get("fullTime") or {}
+        reg = score.get("regularTime") or {}
         pens = score.get("penalties") or {}
+        shootout = score.get("duration") == "PENALTY_SHOOTOUT"
+        # match score = the football result (regulation/ET tie); fall back to fullTime
+        base = reg if reg.get("home") is not None else ft
+        score_str = f"{base.get('home')}-{base.get('away')}" if base.get("home") is not None else None
+        # shootout score: prefer a decided penalties field, else the fullTime aggregate
+        pen_str = None
+        if shootout:
+            if pens.get("home") is not None and pens.get("home") != pens.get("away"):
+                pen_str = f"{pens.get('home')}-{pens.get('away')}"
+            elif ft.get("home") is not None:
+                pen_str = f"{ft.get('home')}-{ft.get('away')}"
         out.append({
             "stage": stage,
             "home": to_pt(home), "away": to_pt(away),
             "homeEn": home, "awayEn": away,
             "status": m.get("status"),
             "winner": to_pt(winner_en),
-            "score": (f"{ft.get('home')}-{ft.get('away')}" if ft.get("home") is not None else None),
-            "penalties": (f"{pens.get('home')}-{pens.get('away')}" if pens.get("home") is not None else None),
+            "score": score_str,
+            "pen": pen_str,
             "duration": score.get("duration"),
             "utcDate": m.get("utcDate"),
         })
@@ -142,13 +158,17 @@ def apply(payload: dict) -> None:
             if r.get("utcDate"):
                 m["date"] = r["utcDate"]
             if r["winner"]:
-                # store score from A's perspective (UI reads m.score)
-                score = r["score"]
-                if score and r["away"] == m["a"]:  # fixture orientation flipped
-                    h, a = score.split("-"); score = f"{a}-{h}"
-                if m.get("winner") != r["winner"] or m.get("score") != score:
+                flip = r["away"] == m["a"]  # API fixture orientation reversed vs ours
+
+                def orient(s):  # store scores from team A's perspective (UI reads them)
+                    if s and flip:
+                        h, a = s.split("-"); return f"{a}-{h}"
+                    return s
+                score, pen = orient(r["score"]), orient(r.get("pen"))
+                if m.get("winner") != r["winner"] or m.get("score") != score or m.get("pen") != pen:
                     m["winner"] = r["winner"]
                     m["score"] = score
+                    m["pen"] = pen
                     applied += 1
             break
 

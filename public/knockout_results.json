@@ -1,5 +1,5 @@
 {
- "updated": "2026-06-28T21:10:28+00:00",
+ "updated": "2026-06-30T00:08:33+00:00",
  "results": [
   {
    "stage": "r32",
@@ -10,7 +10,7 @@
    "status": "FINISHED",
    "winner": "Canadá",
    "score": "0-1",
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-28T19:00:00Z"
   },
@@ -20,10 +20,10 @@
    "away": "Japão",
    "homeEn": "Brazil",
    "awayEn": "Japan",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
-   "penalties": null,
+   "status": "FINISHED",
+   "winner": "Brasil",
+   "score": "2-1",
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-29T17:00:00Z"
   },
@@ -33,11 +33,11 @@
    "away": "Paraguai",
    "homeEn": "Germany",
    "awayEn": "Paraguay",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
-   "penalties": null,
-   "duration": "REGULAR",
+   "status": "FINISHED",
+   "winner": "Paraguai",
+   "score": "1-1",
+   "pen": "5-6",
+   "duration": "PENALTY_SHOOTOUT",
    "utcDate": "2026-06-29T20:30:00Z"
   },
   {
@@ -49,7 +49,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-30T01:00:00Z"
   },
@@ -62,7 +62,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-30T17:00:00Z"
   },
@@ -75,7 +75,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-30T21:00:00Z"
   },
@@ -88,7 +88,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-01T01:00:00Z"
   },
@@ -101,7 +101,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-01T16:00:00Z"
   },
@@ -114,7 +114,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-01T20:00:00Z"
   },
@@ -127,7 +127,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-02T00:00:00Z"
   },
@@ -140,7 +140,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-02T19:00:00Z"
   },
@@ -153,7 +153,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-02T23:00:00Z"
   },
@@ -166,7 +166,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-03T03:00:00Z"
   },
@@ -179,7 +179,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-03T18:00:00Z"
   },
@@ -192,7 +192,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-03T22:00:00Z"
   },
@@ -205,7 +205,7 @@
    "status": "TIMED",
    "winner": null,
    "score": null,
-   "penalties": null,
+   "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-04T01:30:00Z"
   }

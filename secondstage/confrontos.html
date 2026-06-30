@@ -70,7 +70,7 @@
         return `
         <div class="rounded-2xl border ${decided ? "border-emerald-500/40" : proj ? "border-dashed border-slate-700/70" : "border-slate-800"} bg-slate-900 p-4">
           <div class="mb-2 flex items-center justify-between text-[0.65rem] font-bold uppercase tracking-wider text-slate-600">
-            <span>${m.date ? fmtKick(m.date) : s.label}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}</span>` : proj ? `<span class="text-amber-500/80">projeção</span>` : `<span>${tot}/${NP}</span>`}
+            <span>${m.date ? fmtKick(m.date) : s.label}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}${m.pen ? ` <span class="text-amber-300">(pên ${m.pen})</span>` : ""}</span>` : proj ? `<span class="text-amber-500/80">projeção</span>` : `<span>${tot}/${NP}</span>`}
           </div>
           <div class="flex items-center gap-2">
             ${side(m.a, m.crestA, m.tallyA, aHi, aWon, "l")}
