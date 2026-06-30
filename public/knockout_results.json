@@ -1,5 +1,5 @@
 {
- "updated": "2026-06-30T00:08:33+00:00",
+ "updated": "2026-06-30T06:39:22+00:00",
  "results": [
   {
    "stage": "r32",
@@ -36,7 +36,7 @@
    "status": "FINISHED",
    "winner": "Paraguai",
    "score": "1-1",
-   "pen": "5-6",
+   "pen": "3-4",
    "duration": "PENALTY_SHOOTOUT",
    "utcDate": "2026-06-29T20:30:00Z"
   },
@@ -46,11 +46,11 @@
    "away": "Marrocos",
    "homeEn": "Netherlands",
    "awayEn": "Morocco",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
-   "pen": null,
-   "duration": "REGULAR",
+   "status": "FINISHED",
+   "winner": "Marrocos",
+   "score": "1-1",
+   "pen": "2-3",
+   "duration": "PENALTY_SHOOTOUT",
    "utcDate": "2026-06-30T01:00:00Z"
   },
   {
@@ -208,6 +208,19 @@
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-04T01:30:00Z"
+  },
+  {
+   "stage": "r16",
+   "home": "Canadá",
+   "away": "Marrocos",
+   "homeEn": "Canada",
+   "awayEn": "Morocco",
+   "status": "TIMED",
+   "winner": null,
+   "score": null,
+   "pen": null,
+   "duration": "REGULAR",
+   "utcDate": "2026-07-04T17:00:00Z"
   }
  ]
 }
