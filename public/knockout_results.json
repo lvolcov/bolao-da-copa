@@ -1,5 +1,5 @@
 {
- "updated": "2026-06-30T06:39:22+00:00",
+ "updated": "2026-06-30T19:08:13+00:00",
  "results": [
   {
    "stage": "r32",
@@ -59,9 +59,9 @@
    "away": "Noruega",
    "homeEn": "Ivory Coast",
    "awayEn": "Norway",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Noruega",
+   "score": "1-2",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-06-30T17:00:00Z"
