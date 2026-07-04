@@ -168,8 +168,15 @@ When a round finishes and the next one opens, do this in order:
    with the real 8/4/2/1 confrontos — `knockout_results.json` lists the drawn
    fixtures (home/away). Set `a`, `b`, `crestA`, `crestB` (crests come from
    `K.crests` / `teamMeta`); leave `tally*`/`back*`/`winner` empty.
-3. **Load the new picks.** When the apostadores submit, drop the updated Excel in
-   the repo root and run:
+3. **Load the new picks.** Via Google Forms (preferred since the oitavas): export
+   the responses sheet as CSV and run
+   ```bash
+   cd /opt/bolao-da-copa && python3 scripts/import_form.py respostas_<fase>.csv
+   ```
+   (`scripts/create_form_oitavas.gs` is the template for creating the form; keep
+   the "Jogo N: A × B" title format — the importer parses it and auto-detects the
+   stage. The CSV is git-ignored: it contains emails.) Or, via the old Excel
+   sheet: drop it in the repo root and run:
    ```bash
    cd /opt/bolao-da-copa && python3 scripts/build_data.py
    ```

@@ -10,3 +10,4 @@ __pycache__/
 
 # never commit the API token or local env
 .env
+respostas*.csv
