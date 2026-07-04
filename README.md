@@ -86,7 +86,11 @@ names the API uses and **fails loudly** if it meets an unmapped team (add it to
 ## Second stage — knockout (mata-mata)
 
 Once the group stage ends, the pool moves to the knockouts: each apostador picks
-the winner of every tie, **+2 points per correct pick**. This lives under
+the winner of every tie, with **progressive points per correct pick** — 16-avos
++2, oitavas +3, quartas +4, semi +5, final (campeão) +10. The canonical weights
+live in `STAGE_WEIGHTS` (in `build_data.py` and `fetch_knockout.py`, which
+re-apply them to `data.js` on every run) and each stage's `weight` in `data.js`
+drives all scoring and UI text. This lives under
 `secondstage/` and is **the live GitHub Pages site** — the Action deploys this
 folder, so the homepage opens straight on the Classificação. (The old group-stage
 site stays in `public/` for reference but is no longer deployed.) It's also mirrored
@@ -95,7 +99,7 @@ on the home server's internal door for staging.
 ```
 secondstage/            (LIVE site → github pages + internal door http://192.168.1.107:8137)
   ├─ data.js            window.KO = ALL the data (see below). The single source of truth.
-  ├─ common.js          shared nav + scoring helper (group pts + 2 × acertos)
+  ├─ common.js          shared nav + scoring helper (group pts + weight × acertos)
   ├─ index.html         🏆 Classificação Geral — leaderboard + per-round breakdown
   ├─ confrontos.html    ⚔️ match cards w/ consensus bars (only stages with picks)
   ├─ matriz.html        🧮 matches × apostadores grid
@@ -115,14 +119,15 @@ One object, `window.KO`, holds everything:
 - `crests` — Portuguese team name → crest URL.
 - `stages` — the knockout rounds in order: `r32` (16-avos), `r16` (oitavas), `qf`,
   `sf`, `final`. Each stage has:
-  - `key`, `label`, `full`, `weight` (2), `active` (the round being featured),
+  - `key`, `label`, `full`, `weight` (points per acerto: r32 2, r16 3, qf 4,
+    sf 5, final 10), `active` (the round being featured),
   - `matches` — the **fixtures**: `{a, b, crestA, crestB, tallyA, tallyB, backA,
     backB, winner, score}`. `winner`/`score` are filled by `fetch_knockout.py`;
     the tallies/backs are computed by `build_data.py` from everyone's picks.
   - `picks` — `{player: [pick per match]}`.
 
-Scoring (in `common.js`) = `groupPoints` + Σ over stages of `2 × (picks that match
-the match winner)`. It updates automatically as winners land.
+Scoring (in `common.js`) = `groupPoints` + Σ over stages of `weight × (picks that
+match the match winner)`. It updates automatically as winners land.
 
 ### Serving the internal preview
 
@@ -175,7 +180,12 @@ When a round finishes and the next one opens, do this in order:
    sheet labels the new block differently, add its prefix to `SECTION_MAP` in the
    script (e.g. the round-of-32 block is labelled `"Round 16"`).
 4. **Refresh the door** (just reload — the preview reads the files live) and review.
-5. When happy, delete the `.xlsx` from the repo root (the data now lives in `data.js`).
+5. **Run the tests** — they assert the stage weights (2/3/4/5/10), match counts and
+   that no page hardcodes the old flat +2:
+   ```bash
+   cd /opt/bolao-da-copa && python3 -m unittest discover -s tests
+   ```
+6. When happy, delete the `.xlsx` from the repo root (the data now lives in `data.js`).
 
 ## Local preview
 

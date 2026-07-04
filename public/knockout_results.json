@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-01T22:30:18+00:00",
+ "updated": "2026-07-04T01:12:12+00:00",
  "results": [
   {
    "stage": "r32",
@@ -90,7 +90,7 @@
    "score": "2-0",
    "pen": null,
    "duration": "REGULAR",
-   "utcDate": "2026-07-01T01:00:00Z"
+   "utcDate": "2026-07-01T02:00:00Z"
   },
   {
    "stage": "r32",
@@ -111,8 +111,8 @@
    "away": "Senegal",
    "homeEn": "Belgium",
    "awayEn": "Senegal",
-   "status": "PAUSED",
-   "winner": null,
+   "status": "FINISHED",
+   "winner": "Bélgica",
    "score": "2-2",
    "pen": null,
    "duration": "EXTRA_TIME",
@@ -124,9 +124,9 @@
    "away": "Bósnia e Herzegovina",
    "homeEn": "United States",
    "awayEn": "Bosnia-Herzegovina",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Estados Unidos",
+   "score": "2-0",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-02T00:00:00Z"
@@ -137,9 +137,9 @@
    "away": "Áustria",
    "homeEn": "Spain",
    "awayEn": "Austria",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Espanha",
+   "score": "3-0",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-02T19:00:00Z"
@@ -150,9 +150,9 @@
    "away": "Croácia",
    "homeEn": "Portugal",
    "awayEn": "Croatia",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Portugal",
+   "score": "2-1",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-02T23:00:00Z"
@@ -163,9 +163,9 @@
    "away": "Argélia",
    "homeEn": "Switzerland",
    "awayEn": "Algeria",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Suíça",
+   "score": "2-0",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-03T03:00:00Z"
@@ -176,11 +176,11 @@
    "away": "Egito",
    "homeEn": "Australia",
    "awayEn": "Egypt",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
-   "pen": null,
-   "duration": "REGULAR",
+   "status": "FINISHED",
+   "winner": "Egito",
+   "score": "1-1",
+   "pen": "3-5",
+   "duration": "PENALTY_SHOOTOUT",
    "utcDate": "2026-07-03T18:00:00Z"
   },
   {
@@ -189,11 +189,11 @@
    "away": "Cabo Verde",
    "homeEn": "Argentina",
    "awayEn": "Cape Verde Islands",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Argentina",
+   "score": "3-2",
    "pen": null,
-   "duration": "REGULAR",
+   "duration": "EXTRA_TIME",
    "utcDate": "2026-07-03T22:00:00Z"
   },
   {
@@ -247,6 +247,32 @@
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-05T20:00:00Z"
+  },
+  {
+   "stage": "r16",
+   "home": "México",
+   "away": "Inglaterra",
+   "homeEn": "Mexico",
+   "awayEn": "England",
+   "status": "TIMED",
+   "winner": null,
+   "score": null,
+   "pen": null,
+   "duration": "REGULAR",
+   "utcDate": "2026-07-06T00:00:00Z"
+  },
+  {
+   "stage": "r16",
+   "home": "Estados Unidos",
+   "away": "Bélgica",
+   "homeEn": "United States",
+   "awayEn": "Belgium",
+   "status": "TIMED",
+   "winner": null,
+   "score": null,
+   "pen": null,
+   "duration": "REGULAR",
+   "utcDate": "2026-07-07T00:00:00Z"
   }
  ]
 }

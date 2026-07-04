@@ -41,6 +41,11 @@ DATA_JS = ROOT / "secondstage" / "data.js"
 PREDICTIONS = ROOT / "public" / "predictions.json"
 SHEET = "PontuaçãoPorJogo"
 
+# Points per correct pick in each knockout stage (the pool's rules). Enforced on
+# every rebuild so the weights in data.js can never drift from the announced rules.
+# 16-avos +2 · oitavas +3 · quartas +4 · semi +5 · final (campeão) +10.
+STAGE_WEIGHTS = {"r32": 2, "r16": 3, "qf": 4, "sf": 5, "final": 10}
+
 # Row-label prefix in the sheet  ->  stage key in data.js.
 # Add a line here when a new stage's block appears with a different label.
 SECTION_MAP = {
@@ -157,6 +162,7 @@ def main() -> None:
     latest = max(stages_with_picks, key=order.index) if stages_with_picks else None
     for s in K["stages"]:
         s["active"] = s["key"] == latest
+        s["weight"] = STAGE_WEIGHTS[s["key"]]
 
     DATA_JS.write_text("window.KO=" + json.dumps(K, ensure_ascii=False) + ";\n", encoding="utf-8")
     pj = json.loads(PREDICTIONS.read_text(encoding="utf-8"))

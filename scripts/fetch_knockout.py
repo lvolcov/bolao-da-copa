@@ -7,7 +7,8 @@ Two things happen:
      public/knockout_results.json.
   2. Patch the second-stage data file (secondstage/data.js): for each finished
      match, find the matching confronto by team pair and set its `winner`, so the
-     scoring (+2 per acerto) and the result UI light up automatically.
+     scoring (the stage's weight per acerto — see STAGE_WEIGHTS) and the result UI
+     light up automatically.
 
 The token is read from FOOTBALL_DATA_TOKEN (a repo Actions secret) — never
 committed. Run with --no-apply to only refresh the JSON without touching data.js.
@@ -28,6 +29,10 @@ ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "public" / "knockout_results.json"
 DATA_JS = ROOT / "secondstage" / "data.js"
 URL = "https://api.football-data.org/v4/competitions/WC/matches"
+
+# Points per correct pick per stage (the pool's rules) — must match
+# build_data.STAGE_WEIGHTS. Re-applied on every run so the live site is self-healing.
+STAGE_WEIGHTS = {"r32": 2, "r16": 3, "qf": 4, "sf": 5, "final": 10}
 
 # API stage code -> our stage key in data.js
 STAGE_MAP = {
@@ -144,6 +149,8 @@ def apply(payload: dict) -> None:
     raw = DATA_JS.read_text(encoding="utf-8").strip()
     K = json.loads(raw[raw.index("=") + 1:].rstrip(";"))
     by_key = {s["key"]: s for s in K["stages"]}
+    for s in K["stages"]:
+        s["weight"] = STAGE_WEIGHTS[s["key"]]
 
     applied = 0
     for r in payload["results"]:

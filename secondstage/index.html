@@ -20,7 +20,7 @@
       <div class="relative max-w-xl">
         <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-emerald-400">Copa do Mundo 2026 · Mata-mata</p>
         <h1 class="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-5xl">Classificação <span class="text-emerald-400">Geral</span> 🏆</h1>
-        <p class="mt-2 text-sm text-slate-400 sm:text-base">Pontos da fase de grupos (1 por posição) <b class="text-slate-200">+ 2 por acerto</b> em cada rodada do mata-mata. Toque num nome para ver a distribuição por fase.</p>
+        <p class="mt-2 text-sm text-slate-400 sm:text-base">Pontos da fase de grupos (1 por posição) + acertos do mata-mata: <b class="text-slate-200">16-avos +2 · oitavas +3 · quartas +4 · semi +5 · campeão +10</b>. Toque num nome para ver a distribuição por fase.</p>
         <p id="stagebar" class="mt-3 text-xs text-slate-500"></p>
       </div>
     </header>
@@ -90,7 +90,7 @@
         if (!v) return `<li class="py-0.5 text-slate-700">${m.a} / ${m.b} — <span class="text-amber-600">sem palpite</span></li>`;
         if (m.winner) {
           const ok = v === m.winner;
-          return `<li class="flex items-center gap-1.5 py-0.5">${crest(crestOf(v), "h-4 w-4")}<span class="${ok ? "text-emerald-300" : "text-slate-500 line-through decoration-slate-700"}">${v}</span><span class="text-[0.65rem] ${ok ? "text-emerald-400" : "text-slate-600"}">${ok ? "· ✓ +2" : "· ✗"}</span></li>`;
+          return `<li class="flex items-center gap-1.5 py-0.5">${crest(crestOf(v), "h-4 w-4")}<span class="${ok ? "text-emerald-300" : "text-slate-500 line-through decoration-slate-700"}">${v}</span><span class="text-[0.65rem] ${ok ? "text-emerald-400" : "text-slate-600"}">${ok ? `· ✓ +${active.weight}` : "· ✗"}</span></li>`;
         }
         const fav = BOLAO.favorite(m), withCrowd = v === fav;
         return `<li class="flex items-center gap-1.5 py-0.5">${crest(crestOf(v), "h-4 w-4")}<span class="text-slate-300">${v}</span><span class="text-[0.65rem] ${withCrowd ? "text-emerald-500/70" : "text-slate-600"}">${withCrowd ? "· maioria" : "· zebra"}</span></li>`;

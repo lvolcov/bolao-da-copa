@@ -100,12 +100,13 @@
         <span class="text-[0.6rem] text-slate-600">sai daqui</span>
       </div>`;
 
+    const w = Object.fromEntries(K.stages.map(s => [s.key, s.weight]));
     el.innerHTML =
-      colWrap("16-avos", "palpite da maioria · toque pra ver votos", c1, "text-emerald-300") +
-      colWrap("Oitavas", "projeção", c2, "text-amber-300") +
-      colWrap("Quartas", "a definir", tbd(4), "text-slate-500") +
-      colWrap("Semi", "a definir", tbd(2), "text-slate-500") +
-      colWrap("Final", "a definir", champ, "text-slate-500");
+      colWrap("16-avos", `+${w.r32} por acerto · palpite da maioria · toque pra ver votos`, c1, "text-emerald-300") +
+      colWrap("Oitavas", `+${w.r16} por acerto · projeção`, c2, "text-amber-300") +
+      colWrap("Quartas", `+${w.qf} por acerto · a definir`, tbd(4), "text-slate-500") +
+      colWrap("Semi", `+${w.sf} por acerto · a definir`, tbd(2), "text-slate-500") +
+      colWrap("Final", `campeão vale +${w.final} · a definir`, champ, "text-slate-500");
 
     // ---- tooltip de votos (hover no desktop, toque no celular) ----
     const tip = document.createElement("div");
