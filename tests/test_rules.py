@@ -154,5 +154,24 @@ class TestNoStaleHardcodedPoints(unittest.TestCase):
         self.assertEqual(self.STALE.findall(src), [])
 
 
+class TestPagesFollowActiveStage(unittest.TestCase):
+    """Pages must derive the featured stage from data.js, never hardcode a round."""
+
+    def test_chaveamento_builds_columns_from_stages(self):
+        src = (SECOND / "chaveamento.html").read_text(encoding="utf-8")
+        # every column label comes from s.label — a quoted literal means a
+        # hardcoded round crept back in
+        self.assertNotIn('colWrap("', src)
+        self.assertIn("K.stages.map", src)
+
+    def test_confrontos_opens_on_active_stage(self):
+        src = (SECOND / "confrontos.html").read_text(encoding="utf-8")
+        self.assertIn("stages.findIndex(s => s.active)", src)
+
+    def test_matriz_opens_on_active_stage(self):
+        src = (SECOND / "matriz.html").read_text(encoding="utf-8")
+        self.assertIn("K.stages.findIndex(s => s.active)", src)
+
+
 if __name__ == "__main__":
     unittest.main()

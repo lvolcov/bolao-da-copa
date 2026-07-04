@@ -16,9 +16,9 @@
       <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-emerald-400">Mata-mata</p>
       <h1 class="mt-1 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Chaveamento 🗺️</h1>
       <p class="mt-2 max-w-2xl text-sm text-slate-400">
-        As <b class="text-emerald-300">16-avos</b> mostram o palpite da maioria (quem o bolão coloca pra avançar).
-        As <b class="text-amber-300">oitavas</b> são a projeção <i>se cada favorito vencer</i>.
-        Quartas em diante só se desenham quando abrirmos os palpites de cada fase. Arraste para o lado →
+        Fases com palpites mostram os <b class="text-emerald-300">votos reais</b> (✅ = confronto decidido).
+        A fase seguinte é a <b class="text-amber-300">projeção</b> <i>se cada favorito avançar</i>;
+        daí em diante, a definir. Arraste para o lado →
       </p>
     </header>
     <div id="bracket" class="mt-6 flex items-stretch gap-3 overflow-x-auto pb-4"></div>
@@ -28,22 +28,12 @@
   <script src="./data.js"></script>
   <script src="./common.js"></script>
   <script>
-    const { K, renderNav, crest, fmtKick } = BOLAO;
+    const { K, renderNav, crest, crestOf, fmtKick } = BOLAO;
     renderNav("vnav");
 
-    const r32 = K.stages.find(s => s.key === "r32");
-    // round 1: real votes; the actual winner advances once decided, else the favorite
-    const round1 = r32.matches.map(m => {
-      const a = { name: m.a, crest: m.crestA, votes: m.tallyA, backers: m.backA || [] };
-      const b = { name: m.b, crest: m.crestB, votes: m.tallyB, backers: m.backB || [] };
-      const decided = !!m.winner;
-      const won = decided ? (m.winner === m.a ? "a" : "b") : null;
-      return { a, b, favA: m.tallyA >= m.tallyB, decided, won, date: m.date };
-    });
-    const winners = round1.map(m => m.decided ? (m.won === "a" ? m.a : m.b) : (m.favA ? m.a : m.b));
-    // round 2 (oitavas): pair the projected winners
-    const round2 = [];
-    for (let i = 0; i < winners.length; i += 2) round2.push({ a: winners[i], b: winners[i + 1] });
+    const hasPicks = (s) => K.players.some(p => (s.picks[p] || []).some(Boolean));
+    // quem avança de um confronto: vencedor real se decidido, senão a maioria dos votos
+    const advance = (m) => m.winner || (m.tallyA >= m.tallyB ? m.a : m.b);
 
     const el = document.getElementById("bracket");
     const colWrap = (label, sub, cards, accent) =>
@@ -55,40 +45,43 @@
         <div class="flex flex-1 flex-col justify-around gap-2">${cards}</div>
       </div>`;
 
-    // --- col 1: 16-avos (real) ---
-    const c1 = round1.map((m, i) => {
-      const tot = m.a.votes + m.b.votes;
-      // quem destacar: vencedor real se decidido, senão a maioria dos votos
-      const hiA = m.decided ? m.won === "a" : m.favA;
-      const teamRow = (t, hi, isWinner, isLoser) => {
-        const pct = tot ? Math.round(t.votes / tot * 100) : 0;
-        return `<div class="relative flex items-center gap-1.5 overflow-hidden rounded-md px-2 py-1.5 ${hi ? "bg-emerald-500/15" : ""}">
-            <div class="absolute inset-y-0 left-0 ${hi ? "bg-emerald-500/15" : "bg-slate-700/20"}" style="width:${pct}%"></div>
-            ${crest(t.crest, "h-5 w-5")}
-            <span class="relative flex-1 truncate text-xs font-semibold ${hi ? "text-emerald-200" : isLoser ? "text-slate-600 line-through decoration-slate-700" : "text-slate-500"}">${isWinner ? "✅ " : ""}${t.name}</span>
-            <span class="relative text-[0.7rem] font-bold tabular-nums ${hi ? "text-emerald-300" : "text-slate-600"}">${t.votes}</span>
-          </div>`;
-      };
-      return `<div data-ko="${i}" tabindex="0" class="cursor-pointer rounded-xl border ${m.decided ? "border-emerald-500/40" : "border-slate-800"} bg-slate-900 p-1.5 transition hover:border-emerald-400/60 focus:outline-none focus:ring-1 focus:ring-emerald-500/50">
-          ${teamRow(m.a, hiA, m.decided && m.won === "a", m.decided && m.won !== "a")}${teamRow(m.b, !hiA, m.decided && m.won === "b", m.decided && m.won !== "b")}
+    // --- coluna com votos reais (fase que já tem palpites) ---
+    const teamRow = (name, crestUrl, votes, tot, hi, isWinner, isLoser) => {
+      const pct = tot ? Math.round(votes / tot * 100) : 0;
+      return `<div class="relative flex items-center gap-1.5 overflow-hidden rounded-md px-2 py-1.5 ${hi ? "bg-emerald-500/15" : ""}">
+          <div class="absolute inset-y-0 left-0 ${hi ? "bg-emerald-500/15" : "bg-slate-700/20"}" style="width:${pct}%"></div>
+          ${crest(crestUrl, "h-5 w-5")}
+          <span class="relative flex-1 truncate text-xs font-semibold ${hi ? "text-emerald-200" : isLoser ? "text-slate-600 line-through decoration-slate-700" : "text-slate-500"}">${isWinner ? "✅ " : ""}${name}</span>
+          <span class="relative text-[0.7rem] font-bold tabular-nums ${hi ? "text-emerald-300" : "text-slate-600"}">${votes}</span>
+        </div>`;
+    };
+    const realCards = (s) => s.matches.map((m, i) => {
+      const tot = m.tallyA + m.tallyB, decided = !!m.winner;
+      const aHi = decided ? m.winner === m.a : m.tallyA >= m.tallyB;
+      return `<div data-st="${s.key}" data-mi="${i}" tabindex="0" class="cursor-pointer rounded-xl border ${decided ? "border-emerald-500/40" : "border-slate-800"} bg-slate-900 p-1.5 transition hover:border-emerald-400/60 focus:outline-none focus:ring-1 focus:ring-emerald-500/50">
+          ${teamRow(m.a, m.crestA, m.tallyA, tot, aHi, decided && m.winner === m.a, decided && m.winner !== m.a)}
+          ${teamRow(m.b, m.crestB, m.tallyB, tot, !aHi, decided && m.winner === m.b, decided && m.winner !== m.b)}
           ${m.date ? `<div class="px-2 pt-0.5 text-center text-[0.55rem] text-slate-600">${fmtKick(m.date)}</div>` : ""}
         </div>`;
     }).join("");
 
-    // --- col 2: oitavas (projected matchups) ---
-    const c2 = round2.map(m => {
-      const teamRow = (t) => `<div class="flex items-center gap-1.5 rounded-md px-2 py-1.5">
-          ${crest(t.crest, "h-5 w-5")}
-          <span class="flex-1 truncate text-xs font-semibold text-slate-300">${t.name}</span>
+    // --- coluna de projeção: pares de quem avança da fase anterior ---
+    const projCards = (prev) => {
+      const adv = prev.matches.map(advance), cards = [];
+      const row = (t) => `<div class="flex items-center gap-1.5 rounded-md px-2 py-1.5">
+          ${crest(crestOf(t), "h-5 w-5")}
+          <span class="flex-1 truncate text-xs font-semibold text-slate-300">${t}</span>
         </div>`;
-      return `<div class="rounded-xl border border-dashed border-amber-500/40 bg-amber-500/5 p-1.5">
-          ${teamRow(m.a)}
-          <div class="my-0.5 text-center text-[0.6rem] font-bold uppercase tracking-wider text-amber-500/60">vs</div>
-          ${teamRow(m.b)}
-        </div>`;
-    }).join("");
+      for (let i = 0; i < adv.length; i += 2)
+        cards.push(`<div class="rounded-xl border border-dashed border-amber-500/40 bg-amber-500/5 p-1.5">
+            ${row(adv[i])}
+            <div class="my-0.5 text-center text-[0.6rem] font-bold uppercase tracking-wider text-amber-500/60">vs</div>
+            ${row(adv[i + 1])}
+          </div>`);
+      return cards.join("");
+    };
 
-    // --- cols 3-5: undetermined slots ---
+    // --- colunas ainda indefinidas ---
     const tbd = (n) => Array.from({ length: n }, () =>
       `<div class="flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-slate-700/60 bg-slate-900/40 px-2 py-4 text-center">
         <span class="text-lg opacity-40">⚽</span>
@@ -100,37 +93,39 @@
         <span class="text-[0.6rem] text-slate-600">sai daqui</span>
       </div>`;
 
-    const w = Object.fromEntries(K.stages.map(s => [s.key, s.weight]));
-    el.innerHTML =
-      colWrap("16-avos", `+${w.r32} por acerto · palpite da maioria · toque pra ver votos`, c1, "text-emerald-300") +
-      colWrap("Oitavas", `+${w.r16} por acerto · projeção`, c2, "text-amber-300") +
-      colWrap("Quartas", `+${w.qf} por acerto · a definir`, tbd(4), "text-slate-500") +
-      colWrap("Semi", `+${w.sf} por acerto · a definir`, tbd(2), "text-slate-500") +
-      colWrap("Final", `campeão vale +${w.final} · a definir`, champ, "text-slate-500");
+    el.innerHTML = K.stages.map((s, idx) => {
+      const prev = K.stages[idx - 1];
+      if (hasPicks(s)) return colWrap(s.label, `+${s.weight} por acerto · votos reais · toque pra ver`, realCards(s), "text-emerald-300");
+      if (prev && hasPicks(prev)) return colWrap(s.label, `+${s.weight} por acerto · projeção`, projCards(prev), "text-amber-300");
+      if (s.key === "final") return colWrap(s.label, `campeão vale +${s.weight}`, champ, "text-slate-500");
+      return colWrap(s.label, `+${s.weight} por acerto · a definir`, tbd(s.matches.length), "text-slate-500");
+    }).join("");
 
     // ---- tooltip de votos (hover no desktop, toque no celular) ----
     const tip = document.createElement("div");
     tip.className = "pointer-events-none fixed z-50 hidden w-64 rounded-2xl border border-slate-700 bg-slate-900/95 p-3 shadow-2xl shadow-black/50 backdrop-blur";
     document.body.appendChild(tip);
 
-    const col = (t, hi, isWinner) => {
-      const names = t.backers.length
-        ? t.backers.map(p => `<li class="truncate text-[0.7rem] ${hi ? "text-emerald-300" : "text-slate-400"}">${p}</li>`).join("")
+    const stByKey = Object.fromEntries(K.stages.map(s => [s.key, s]));
+    const col = (name, crestUrl, votes, backers, hi, isWinner) => {
+      const names = backers.length
+        ? backers.map(p => `<li class="truncate text-[0.7rem] ${hi ? "text-emerald-300" : "text-slate-400"}">${p}</li>`).join("")
         : `<li class="text-[0.7rem] text-slate-600">ninguém</li>`;
       return `<div class="min-w-0 flex-1">
-          <div class="mb-1 flex items-center gap-1">${crest(t.crest, "h-4 w-4")}<span class="truncate text-xs font-bold ${hi ? "text-emerald-300" : "text-slate-300"}">${isWinner ? "✅ " : ""}${t.name}</span></div>
-          <div class="mb-1 text-[0.65rem] font-semibold ${hi ? "text-emerald-400" : "text-slate-500"}">${t.votes} voto${t.votes === 1 ? "" : "s"}</div>
+          <div class="mb-1 flex items-center gap-1">${crest(crestUrl, "h-4 w-4")}<span class="truncate text-xs font-bold ${hi ? "text-emerald-300" : "text-slate-300"}">${isWinner ? "✅ " : ""}${name}</span></div>
+          <div class="mb-1 text-[0.65rem] font-semibold ${hi ? "text-emerald-400" : "text-slate-500"}">${votes} voto${votes === 1 ? "" : "s"}</div>
           <ul class="space-y-0.5">${names}</ul>
         </div>`;
     };
 
-    function fill(i) {
-      const m = round1[i];
-      const hiA = m.decided ? m.won === "a" : m.favA;
+    function fill(card) {
+      const s = stByKey[card.dataset.st], m = s.matches[+card.dataset.mi];
+      const decided = !!m.winner;
+      const aHi = decided ? m.winner === m.a : m.tallyA >= m.tallyB;
       tip.innerHTML = `<div class="flex gap-3">
-          ${col(m.a, hiA, m.decided && m.won === "a")}
+          ${col(m.a, m.crestA, m.tallyA, m.backA || [], aHi, decided && m.winner === m.a)}
           <div class="w-px shrink-0 bg-slate-700"></div>
-          ${col(m.b, !hiA, m.decided && m.won === "b")}
+          ${col(m.b, m.crestB, m.tallyB, m.backB || [], !aHi, decided && m.winner === m.b)}
         </div>`;
     }
     function place(card) {
@@ -142,10 +137,10 @@
       tip.style.top = (r.top - h - gap >= 8 ? r.top - h - gap : r.bottom + gap) + "px";
     }
     let pinned = null;
-    const show = (card) => { fill(+card.dataset.ko); tip.classList.remove("hidden"); place(card); };
+    const show = (card) => { fill(card); tip.classList.remove("hidden"); place(card); };
     const hide = () => { tip.classList.add("hidden"); pinned = null; };
 
-    el.querySelectorAll("[data-ko]").forEach(card => {
+    el.querySelectorAll("[data-st]").forEach(card => {
       card.addEventListener("mouseenter", () => { if (!pinned) show(card); });
       card.addEventListener("mouseleave", () => { if (!pinned) hide(); });
       card.addEventListener("focus", () => show(card));

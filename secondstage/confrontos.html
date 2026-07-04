@@ -32,7 +32,9 @@
     // só fases já definidas (com palpites reais) — nada de confronto projetado/inventado
     const hasPicks = (s) => K.players.some(p => (s.picks[p] || []).some(Boolean));
     const stages = K.stages.filter(hasPicks);
-    let cur = 0;
+    // abre na fase ativa (a mais avançada com palpites), não na primeira
+    let cur = stages.findIndex(s => s.active);
+    if (cur < 0) cur = stages.length - 1;
 
     function renderStages() {
       // esconde o seletor se só houver uma fase aberta
