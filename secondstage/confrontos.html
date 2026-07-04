@@ -45,10 +45,11 @@
 
     function draw() {
       const s = stages[cur];
-      const proj = !s.active;
+      // toda fase listada tem palpites reais — não-ativa aqui significa fase já encerrada
+      const stageDone = !s.active;
       const sub = K.players.filter(p => (s.picks[p] || []).some(Boolean)).length;
-      document.getElementById("note").innerHTML = proj
-        ? `⏳ <b class="text-amber-300">${s.full}</b> ainda não começou — mostrando a <b>projeção</b> pelos favoritos do bolão. Os palpites de verdade entram quando a fase abrir.`
+      document.getElementById("note").innerHTML = stageDone
+        ? `✅ <b class="text-emerald-300">${s.full}</b> — fase encerrada · cada acerto valeu <b class="text-emerald-300">+${s.weight}</b>`
         : `<b class="text-emerald-300">${s.full}</b> · ${sub}/${NP} apostadores já votaram · cada acerto vale <b class="text-emerald-300">+${s.weight}</b>`;
 
       const el = document.getElementById("matches");
@@ -66,20 +67,19 @@
             ${crest(c, "h-6 w-6")}
             <div class="flex flex-col ${align === "r" ? "items-end" : ""}">
               <span class="flex items-center gap-1 text-sm font-semibold leading-tight ${hi ? "text-emerald-300" : decided ? "text-slate-500 line-through decoration-slate-700" : "text-slate-300"}">${won ? "✅ " : ""}${name}</span>
-              ${proj ? "" : `<span class="text-xs ${hi ? "text-emerald-400" : "text-slate-500"}">${n} voto${n === 1 ? "" : "s"}</span>`}
+              <span class="text-xs ${hi ? "text-emerald-400" : "text-slate-500"}">${n} voto${n === 1 ? "" : "s"}</span>
             </div>
           </div>`;
         return `
-        <div class="rounded-2xl border ${decided ? "border-emerald-500/40" : proj ? "border-dashed border-slate-700/70" : "border-slate-800"} bg-slate-900 p-4">
+        <div class="rounded-2xl border ${decided ? "border-emerald-500/40" : "border-slate-800"} bg-slate-900 p-4">
           <div class="mb-2 flex items-center justify-between text-[0.65rem] font-bold uppercase tracking-wider text-slate-600">
-            <span>${m.date ? fmtKick(m.date) : s.label}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}${m.pen ? ` <span class="text-amber-300">(pên ${m.pen})</span>` : ""}</span>` : proj ? `<span class="text-amber-500/80">projeção</span>` : `<span>${tot}/${NP}</span>`}
+            <span>${m.date ? fmtKick(m.date) : s.label}</span>${decided ? `<span class="text-emerald-400">encerrado${m.score ? " · " + m.score : ""}${m.pen ? ` <span class="text-amber-300">(pên ${m.pen})</span>` : ""}</span>` : `<span>${tot}/${NP}</span>`}
           </div>
           <div class="flex items-center gap-2">
             ${side(m.a, m.crestA, m.tallyA, aHi, aWon, "l")}
             <span class="px-1 text-xs font-bold text-slate-600">×</span>
             ${side(m.b, m.crestB, m.tallyB, bHi, bWon, "r")}
           </div>
-          ${proj ? "" : `
           <div class="mt-3 flex h-2 overflow-hidden rounded-full bg-slate-800">
             <div class="${aHi ? "bg-emerald-500" : "bg-slate-600"}" style="width:${pa}%"></div>
             <div class="${bHi ? "bg-emerald-500" : "bg-slate-600"}" style="width:${pb}%"></div>

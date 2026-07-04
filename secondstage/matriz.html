@@ -40,13 +40,17 @@
 
     function draw() {
       const s = K.stages[cur];
-      if (!s.active) {
+      const sub = P.filter(p => (s.picks[p] || []).some(Boolean));
+      if (!sub.length) {
         document.getElementById("note").innerHTML = `⏳ <b class="text-amber-300">${s.full}</b> ainda não abriu para palpites.`;
         document.getElementById("wrap").innerHTML = `<div class="p-8 text-center text-sm text-slate-500">Sem palpites nesta fase ainda. Veja a projeção em <a href="./chaveamento.html" class="text-emerald-400 hover:underline">Chaveamento</a>.</div>`;
         return;
       }
-      const sub = P.filter(p => (s.picks[p] || []).some(Boolean));
-      document.getElementById("note").innerHTML = `<b class="text-emerald-300">${s.full}</b> · <b class="text-emerald-300">+${s.weight}</b> por acerto · ${sub.length}/${NP} enviaram · pendentes: ${P.filter(p => !(s.picks[p] || []).some(Boolean)).join(", ") || "nenhum"}`;
+      // fase com palpites reais mas não ativa = já encerrada (não "ainda não abriu")
+      const stageDone = !s.active;
+      document.getElementById("note").innerHTML = stageDone
+        ? `✅ <b class="text-emerald-300">${s.full}</b> — fase encerrada · cada acerto valeu <b class="text-emerald-300">+${s.weight}</b>`
+        : `<b class="text-emerald-300">${s.full}</b> · <b class="text-emerald-300">+${s.weight}</b> por acerto · ${sub.length}/${NP} enviaram · pendentes: ${P.filter(p => !(s.picks[p] || []).some(Boolean)).join(", ") || "nenhum"}`;
 
       const head = `<th class="sticky left-0 z-10 bg-slate-900 px-3 py-2 text-left text-[0.6rem] uppercase tracking-wider text-slate-500">Confronto</th>` +
         P.map(p => { const has = (s.picks[p] || []).some(Boolean);

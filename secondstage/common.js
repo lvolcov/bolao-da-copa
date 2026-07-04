@@ -5,6 +5,7 @@ window.BOLAO = (() => {
     ["index", "🏆 Classificação"],
     ["confrontos", "⚔️ Confrontos"],
     ["matriz", "🧮 Matriz"],
+    ["evolucao", "📈 Evolução"],
     ["chaveamento", "🗺️ Chaveamento"],
     ["grupos", "📋 Grupos"],
   ];

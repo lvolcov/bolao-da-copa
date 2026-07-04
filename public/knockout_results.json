@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-04T11:03:04+00:00",
+ "updated": "2026-07-04T21:25:04+00:00",
  "results": [
   {
    "stage": "r32",
@@ -215,9 +215,9 @@
    "away": "Marrocos",
    "homeEn": "Canada",
    "awayEn": "Morocco",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Marrocos",
+   "score": "0-3",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-04T17:00:00Z"
@@ -228,9 +228,9 @@
    "away": "França",
    "homeEn": "Paraguay",
    "awayEn": "France",
-   "status": "TIMED",
+   "status": "LIVE",
    "winner": null,
-   "score": null,
+   "score": "0-0",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-04T21:00:00Z"
