@@ -8,6 +8,7 @@
   const CHUVA = true;
   const CHUVA_MS = 10000;
   const UMA_VEZ_POR_SESSAO = true;
+  const MUSICA = true; // Farewell My Lovely (tema triste do Chaves), ./luto.mp3, ~10s com fade
 
   const Z = 2147483000; // acima de tudo, abaixo do painel do diag.js? não importa: pointer-events none
 
@@ -37,6 +38,22 @@
   }
 
   onReady(() => {
+    // música triste: navegadores bloqueiam áudio automático sem interação;
+    // tenta tocar já e, se bloquear, toca no primeiro toque/clique/tecla.
+    if (MUSICA) {
+      const audio = new Audio("./luto.mp3");
+      audio.volume = 0.7;
+      const arm = () => {
+        const once = { once: true };
+        const go = () => {
+          audio.play().catch(() => {});
+          ["pointerdown", "keydown", "touchstart"].forEach((ev) => removeEventListener(ev, go));
+        };
+        ["pointerdown", "keydown", "touchstart"].forEach((ev) => addEventListener(ev, go, once));
+      };
+      audio.play().catch(arm);
+    }
+
     const canvas = document.createElement("canvas");
     canvas.style.cssText = `position:fixed;inset:0;z-index:${Z + 1};pointer-events:none;transition:opacity .9s`;
     document.body.appendChild(canvas);
