@@ -30,7 +30,9 @@
 
   // ---- chuva + relâmpagos por 10 segundos ----
   if (!CHUVA) return;
-  if (UMA_VEZ_POR_SESSAO) {
+  // ?luto na URL força a chuva+música de novo (para testar/demonstrar)
+  const FORCAR = new URLSearchParams(location.search).has("luto");
+  if (UMA_VEZ_POR_SESSAO && !FORCAR) {
     try {
       if (sessionStorage.getItem("luto_chuva")) return;
       sessionStorage.setItem("luto_chuva", "1");
@@ -42,7 +44,7 @@
     // tenta tocar já e, se bloquear, toca no primeiro toque/clique/tecla.
     if (MUSICA) {
       const audio = new Audio("./luto.mp3");
-      audio.volume = 0.7;
+      audio.volume = 1.0;
       const arm = () => {
         const once = { once: true };
         const go = () => {
