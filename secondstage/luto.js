@@ -45,15 +45,17 @@
     if (MUSICA) {
       const audio = new Audio("./luto.mp3");
       audio.volume = 1.0;
-      const arm = () => {
-        const once = { once: true };
-        const go = () => {
-          audio.play().catch(() => {});
-          ["pointerdown", "keydown", "touchstart"].forEach((ev) => removeEventListener(ev, go));
-        };
-        ["pointerdown", "keydown", "touchstart"].forEach((ev) => addEventListener(ev, go, once));
+      // No celular só o FIM do gesto (pointerup/touchend/click) concede
+      // permissão de som — pointerdown/touchstart NÃO contam. Tenta em cada
+      // gesto até conseguir; play() em áudio já tocando é inofensivo.
+      const EVS = ["pointerup", "touchend", "keydown", "click"];
+      const tentar = () => {
+        audio.play().then(() => {
+          EVS.forEach((ev) => removeEventListener(ev, tentar, true));
+        }).catch(() => {});
       };
-      audio.play().catch(arm);
+      EVS.forEach((ev) => addEventListener(ev, tentar, true));
+      tentar();
     }
 
     const canvas = document.createElement("canvas");
