@@ -1,8 +1,9 @@
 // Modo luto — Brasil eliminado da Copa (05/07/2026).
 // PRETO_E_BRANCO deixa o site inteiro em preto e branco até ser desligado.
-// A CHUVA é constante (faz parte do luto). A INTRO (relâmpagos + música
-// Farewell My Lovely do Chaves, ./luto.mp3 ~10s) toca uma vez por sessão;
-// ?luto na URL força a intro de novo (para testar/demonstrar).
+// A CHUVA é constante e a MUSICA (Farewell My Lovely do Chaves, ./luto.mp3
+// ~3min) toca em loop com ela — botão 🔊/🔇 no canto superior direito para
+// parar/voltar (a escolha vale pela sessão). Os relâmpagos da INTRO tocam
+// uma vez por sessão; ?luto na URL força de novo (para demonstrar).
 // Para voltar ao normal: flags abaixo = false (ou apague este arquivo e as
 // tags <script src="./luto.js"> das páginas).
 (() => {
@@ -107,40 +108,60 @@
     }
     RELAMPAGOS.forEach((t) => setTimeout(relampago, t + Math.random() * 400));
     setTimeout(() => flash.remove(), Math.max(...RELAMPAGOS) + 3000);
+  });
 
-    if (!MUSICA) return;
+  // ---- música em loop com a chuva ----
+  if (MUSICA) onReady(() => {
+    let mudo = false;
+    try { mudo = sessionStorage.getItem("luto_mudo") === "1"; } catch (e) {}
+
     const audio = new Audio("./luto.mp3");
+    audio.loop = true;
     audio.volume = 1.0;
+    audio.addEventListener("error", () => console.error("luto.mp3 não carregou", audio.error));
+
+    // retoma de onde parou ao navegar entre as páginas
+    try {
+      const pos = parseFloat(sessionStorage.getItem("luto_pos"));
+      if (pos > 0) audio.addEventListener("loadedmetadata", () => {
+        if (pos < audio.duration - 1) audio.currentTime = pos;
+      }, { once: true });
+    } catch (e) { /* sem sessionStorage, recomeça do zero */ }
+    const salvaPos = () => {
+      try { if (!audio.paused) sessionStorage.setItem("luto_pos", String(audio.currentTime)); } catch (e) {}
+    };
+    setInterval(salvaPos, 3000);
+    addEventListener("pagehide", salvaPos);
+
+    // botão parar/voltar no canto superior direito (🔊 tocando, 🔇 parado)
+    const btn = document.createElement("button");
+    btn.title = "Parar/tocar a trilha do luto";
+    btn.style.cssText = `position:fixed;right:14px;top:14px;z-index:${Z + 3};` +
+      "font-size:16px;line-height:1;padding:8px 9px;border-radius:9999px;cursor:pointer;" +
+      "border:1px solid #475569;background:rgba(15,23,42,.85);box-shadow:0 2px 12px rgba(0,0,0,.4)";
+    const pinta = () => { btn.textContent = audio.paused ? "🔇" : "🔊"; };
+    document.body.appendChild(btn);
 
     // Navegadores só liberam som depois de um gesto — e no celular o gesto
     // válido é o FIM do toque (pointerup/touchend/click), não o início.
-    // Tenta já, tenta a cada gesto e, se nada tocar, mostra um botão 🔊
-    // (clique em botão é gesto garantido em qualquer navegador).
-    const btn = document.createElement("button");
-    btn.textContent = "🔊";
-    btn.title = "Tocar a trilha do luto";
-    btn.style.cssText = `position:fixed;right:16px;bottom:16px;z-index:${Z + 3};display:none;` +
-      "font-size:24px;line-height:1;padding:12px 14px;border-radius:9999px;cursor:pointer;" +
-      "border:1px solid #475569;background:rgba(15,23,42,.9);box-shadow:0 4px 20px rgba(0,0,0,.5)";
-    document.body.appendChild(btn);
-
+    // Tenta já e a cada gesto até conseguir (a menos que o usuário mute).
     const EVS = ["pointerup", "touchend", "keydown", "click"];
-    const tentar = () => { audio.play().catch(() => {}); };
+    const tentar = () => { if (!mudo) audio.play().catch(() => {}); };
     audio.addEventListener("playing", () => {
       EVS.forEach((ev) => removeEventListener(ev, tentar, true));
-      btn.remove();
+      pinta();
     });
-    audio.addEventListener("ended", () => btn.remove());
-    audio.addEventListener("error", () => {
-      btn.remove();
-      console.error("luto.mp3 não carregou", audio.error);
+    audio.addEventListener("pause", pinta);
+
+    btn.addEventListener("click", () => {
+      mudo = !audio.paused;
+      if (mudo) audio.pause();
+      else audio.play().catch((err) => console.error("play() falhou no botão:", err));
+      try { sessionStorage.setItem("luto_mudo", mudo ? "1" : "0"); } catch (e) {}
     });
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      audio.play().catch((err) => console.error("play() falhou até no botão:", err));
-    });
+
     EVS.forEach((ev) => addEventListener(ev, tentar, true));
+    pinta();
     tentar();
-    setTimeout(() => { if (audio.paused) btn.style.display = "block"; }, 700);
   });
 })();
