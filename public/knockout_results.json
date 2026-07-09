@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-04T21:25:04+00:00",
+ "updated": "2026-07-09T11:42:54+00:00",
  "results": [
   {
    "stage": "r32",
@@ -228,9 +228,9 @@
    "away": "França",
    "homeEn": "Paraguay",
    "awayEn": "France",
-   "status": "LIVE",
-   "winner": null,
-   "score": "0-0",
+   "status": "FINISHED",
+   "winner": "França",
+   "score": "0-1",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-04T21:00:00Z"
@@ -241,9 +241,9 @@
    "away": "Noruega",
    "homeEn": "Brazil",
    "awayEn": "Norway",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Noruega",
+   "score": "1-2",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-05T20:00:00Z"
@@ -254,12 +254,12 @@
    "away": "Inglaterra",
    "homeEn": "Mexico",
    "awayEn": "England",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Inglaterra",
+   "score": "2-3",
    "pen": null,
    "duration": "REGULAR",
-   "utcDate": "2026-07-06T00:00:00Z"
+   "utcDate": "2026-07-06T01:00:00Z"
   },
   {
    "stage": "r16",
@@ -267,9 +267,9 @@
    "away": "Espanha",
    "homeEn": "Portugal",
    "awayEn": "Spain",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Espanha",
+   "score": "0-1",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-06T19:00:00Z"
@@ -280,9 +280,9 @@
    "away": "Bélgica",
    "homeEn": "United States",
    "awayEn": "Belgium",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Bélgica",
+   "score": "1-4",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-07T00:00:00Z"
@@ -293,9 +293,9 @@
    "away": "Egito",
    "homeEn": "Argentina",
    "awayEn": "Egypt",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Argentina",
+   "score": "3-2",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-07T16:00:00Z"
@@ -306,12 +306,64 @@
    "away": "Colômbia",
    "homeEn": "Switzerland",
    "awayEn": "Colombia",
+   "status": "FINISHED",
+   "winner": "Suíça",
+   "score": "0-0",
+   "pen": "4-3",
+   "duration": "PENALTY_SHOOTOUT",
+   "utcDate": "2026-07-07T20:00:00Z"
+  },
+  {
+   "stage": "qf",
+   "home": "França",
+   "away": "Marrocos",
+   "homeEn": "France",
+   "awayEn": "Morocco",
    "status": "TIMED",
    "winner": null,
    "score": null,
    "pen": null,
    "duration": "REGULAR",
-   "utcDate": "2026-07-07T20:00:00Z"
+   "utcDate": "2026-07-09T20:00:00Z"
+  },
+  {
+   "stage": "qf",
+   "home": "Espanha",
+   "away": "Bélgica",
+   "homeEn": "Spain",
+   "awayEn": "Belgium",
+   "status": "TIMED",
+   "winner": null,
+   "score": null,
+   "pen": null,
+   "duration": "REGULAR",
+   "utcDate": "2026-07-10T19:00:00Z"
+  },
+  {
+   "stage": "qf",
+   "home": "Noruega",
+   "away": "Inglaterra",
+   "homeEn": "Norway",
+   "awayEn": "England",
+   "status": "TIMED",
+   "winner": null,
+   "score": null,
+   "pen": null,
+   "duration": "REGULAR",
+   "utcDate": "2026-07-11T21:00:00Z"
+  },
+  {
+   "stage": "qf",
+   "home": "Argentina",
+   "away": "Suíça",
+   "homeEn": "Argentina",
+   "awayEn": "Switzerland",
+   "status": "TIMED",
+   "winner": null,
+   "score": null,
+   "pen": null,
+   "duration": "REGULAR",
+   "utcDate": "2026-07-12T01:00:00Z"
   }
  ]
 }
