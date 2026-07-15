@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-14T15:52:04+00:00",
+ "updated": "2026-07-15T21:05:09+00:00",
  "results": [
   {
    "stage": "r32",
@@ -371,9 +371,9 @@
    "away": "Espanha",
    "homeEn": "France",
    "awayEn": "Spain",
-   "status": "TIMED",
-   "winner": null,
-   "score": null,
+   "status": "FINISHED",
+   "winner": "Espanha",
+   "score": "0-2",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-14T19:00:00Z"
@@ -384,9 +384,9 @@
    "away": "Argentina",
    "homeEn": "England",
    "awayEn": "Argentina",
-   "status": "TIMED",
+   "status": "IN_PLAY",
    "winner": null,
-   "score": null,
+   "score": "1-2",
    "pen": null,
    "duration": "REGULAR",
    "utcDate": "2026-07-15T19:00:00Z"
