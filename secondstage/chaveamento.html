@@ -72,7 +72,7 @@
       if (!m) return "";
       const tot = m.tallyA + m.tallyB, decided = !!m.winner;
       const aHi = decided ? m.winner === m.a : m.tallyA >= m.tallyB;
-      const card = `<div class="rounded-xl border ${decided ? "border-amber-500/40" : "border-slate-800"} bg-slate-900 p-1.5">
+      const card = `<div data-st="thirdPlace" data-mi="0" tabindex="0" class="cursor-pointer rounded-xl border ${decided ? "border-amber-500/40" : "border-slate-800"} bg-slate-900 p-1.5 transition hover:border-amber-400/60 focus:outline-none focus:ring-1 focus:ring-amber-500/50">
           ${teamRow(m.a, m.crestA, m.tallyA, tot, aHi, decided && m.winner === m.a, decided && m.winner !== m.a)}
           ${teamRow(m.b, m.crestB, m.tallyB, tot, !aHi, decided && m.winner === m.b, decided && m.winner !== m.b)}
           ${m.date ? `<div class="px-2 pt-0.5 text-center text-[0.55rem] text-slate-600">${fmtKick(m.date)}</div>` : ""}
@@ -122,6 +122,7 @@
     document.body.appendChild(tip);
 
     const stByKey = Object.fromEntries(K.stages.map(s => [s.key, s]));
+    if (K.thirdPlace) stByKey["thirdPlace"] = { matches: [K.thirdPlace] };
     const col = (name, crestUrl, votes, backers, hi, isWinner) => {
       const names = backers.length
         ? backers.map(p => `<li class="truncate text-[0.7rem] ${hi ? "text-emerald-300" : "text-slate-400"}">${p}</li>`).join("")
