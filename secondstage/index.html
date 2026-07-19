@@ -26,6 +26,8 @@
       </div>
     </header>
 
+    <section id="podium" class="mt-6"></section>
+
     <section class="mt-6">
       <div class="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-slate-900 px-5 py-4">
         <div class="flex items-center justify-between">
@@ -72,6 +74,39 @@
 
     const medal = (r) => r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : `${r}º`;
     const rows = score();
+
+    // pódio dos campeões — só no estágio final (quando o topo já está garantido)
+    if (active.key === "final" && rows.length >= 3) {
+      const prizes = ["£75", "£45", "£30"];
+      const step = [
+        { h: "h-24 sm:h-28", ring: "border-slate-400/50 bg-slate-400/10", num: "text-slate-200" },
+        { h: "h-28 sm:h-36", ring: "border-amber-400/60 bg-amber-400/10", num: "text-amber-200" },
+        { h: "h-20 sm:h-24", ring: "border-orange-500/50 bg-orange-500/10", num: "text-orange-200" },
+      ];
+      const cell = (rank) => { const r = rows[rank - 1], st = step[rank === 1 ? 1 : rank === 2 ? 0 : 2];
+        return `<div class="flex flex-col items-center">
+            <div class="mb-1 text-3xl sm:text-4xl">${medal(rank)}</div>
+            <div class="w-full truncate text-center text-sm font-bold sm:text-base">${r.player}</div>
+            <div class="text-[0.7rem] font-semibold text-amber-300">${prizes[rank - 1]}</div>
+            <div class="mt-2 flex ${st.h} w-full flex-col items-center justify-start rounded-t-2xl border ${st.ring} pt-2.5">
+              <div class="font-display text-2xl font-extrabold ${st.num} sm:text-3xl">${r.total}</div>
+              <div class="text-[0.55rem] uppercase tracking-wide text-slate-500">pontos</div>
+            </div>
+          </div>`;
+      };
+      document.getElementById("podium").innerHTML = `
+        <div class="relative overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-br from-amber-500/15 via-slate-900 to-slate-900 px-5 py-6 sm:px-8">
+          <div class="text-center">
+            <p class="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-amber-300">🏆 Campeões do Bolão · Copa 2026</p>
+            <h2 class="mt-1 font-display text-2xl font-extrabold sm:text-3xl">Pódio definido! 🎉</h2>
+            <p class="mx-auto mt-1 max-w-lg text-xs text-slate-400">A final ainda está rolando — mas o pódio já está garantido: os três líderes apostaram no mesmo campeão, e a diferença não vira com o resultado.</p>
+          </div>
+          <div class="mx-auto mt-5 grid max-w-md grid-cols-3 items-end gap-2 sm:gap-4">
+            ${cell(2)}${cell(1)}${cell(3)}
+          </div>
+        </div>`;
+    }
+
     const stageChips = (r) => {
       const chips = [`<span class="rounded bg-slate-800 px-1.5 py-0.5"><span class="text-slate-500">Grupos</span> <b class="text-slate-200">${r.group}</b></span>`];
       for (const s of K.stages) {
